@@ -10,7 +10,7 @@ class Main extends Component {
     if (this.props.Page.pageNum == '0') {
       return <Welcome></Welcome>;
     }
-    if (this.props.Page.pageNum == '1') {
+    if (this.props.Page.pageNum > '0') {
       return (
         <View style={{flex: 1, flexDirection: 'column'}}>
           <View style={{flex: 0.1}}>

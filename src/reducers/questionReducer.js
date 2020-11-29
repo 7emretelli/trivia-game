@@ -3,6 +3,7 @@ const INITIAL_STATE = {
   activeQuestion: [],
   loading: true,
   Points: 0,
+  questNum: 0,
 };
 
 const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -13,6 +14,47 @@ const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
       return {...state, activeQuestion: payload};
     default:
       return state;
+    case 'INC_QNUM':
+      qNum = parseInt(state.questNum) + 1;
+      function shuffle(array) {
+        var currentIndex = array.length,
+          temporaryValue,
+          randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      }
+
+      var answers = [];
+      answers.push(
+        state.QUESTIONS.results[qNum].incorrect_answers[0],
+        state.QUESTIONS.results[qNum].incorrect_answers[1],
+        state.QUESTIONS.results[qNum].incorrect_answers[2],
+      );
+      answers.push(state.QUESTIONS.results[qNum].correct_answer);
+
+      var _activeQuestion = [];
+
+      _activeQuestion[0] = state.QUESTIONS.results[qNum].question;
+
+      randomizedAnswers = shuffle(answers);
+      _activeQuestion[1] = randomizedAnswers;
+      return {
+        ...state,
+        questNum: parseInt(payload) + 1,
+        activeQuestion: _activeQuestion,
+      };
   }
 };
 

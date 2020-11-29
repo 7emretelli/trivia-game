@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Text, FlatList} from 'react-native';
 import {connect} from 'react-redux';
+import {increasePageNum} from '../actions/pageAction';
+import {updateActiveQuestion} from '../actions/updateActiveQuestion';
+import {updateQuestNum} from '../actions/updateQuestNum';
+import {updateQuestionData} from '../actions/updateDataAction';
+import {bindActionCreators} from 'redux';
 
 class QuestionPage extends Component {
   constructor(props) {
@@ -10,24 +15,17 @@ class QuestionPage extends Component {
         this.props.Page.questNum
       ].correct_answer,
       Answ: 0,
+      Win: 0,
     };
   }
   componentDidMount() {
-    this.setState({
-      correctAnswer: this.props.QDATA.QUESTIONS.results[
-        this.props.Page.questNum
-      ].correct_answer,
-    });
     console.log('doğru cevap: ', this.state.correctAnswer);
   }
   _question() {
     return (
       <View>
         <Text style={{fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
-          {
-            this.props.QDATA.QUESTIONS.results[this.props.Page.questNum]
-              .question
-          }
+          {this.props.QDATA.activeQuestion[0]}
         </Text>
       </View>
     );
@@ -36,6 +34,16 @@ class QuestionPage extends Component {
     this.setState({
       Answ: item,
     });
+    if (item == this.state.correctAnswer) {
+      this.setState({
+        Win: '1',
+      });
+    }
+    if (item !== this.state.correctAnswer) {
+      this.setState({
+        Win: '2',
+      });
+    }
   }
   _answerStyle(item) {
     if (this.state.Answ == item) {
@@ -80,6 +88,87 @@ class QuestionPage extends Component {
       };
     }
   }
+  _nextPage() {
+    this.props.updateQuestNum(this.props.Page.questNum);
+    this.setState({
+      Win: 0,
+      Answ: 0,
+    });
+    qNum = this.props.QDATA.questNum + 1;
+    this.setState({
+      correctAnswer: this.props.QDATA.QUESTIONS.results[qNum].correct_answer,
+    });
+    console.log(this.props.QDATA.QUESTIONS.results[qNum].correct_answer);
+  }
+  _tryAgain() {
+    activeQuestion = '';
+    questionNumber = -1;
+    pageNumber = -1;
+    this.props.updateActiveQuestion(activeQuestion);
+    this.props.updateQuestNum(questionNumber);
+    this.props.increasePageNum(pageNumber);
+    this.setState({
+      correctAnswer: null,
+      Answ: 0,
+      Win: 0,
+    });
+  }
+  _texts() {
+    if (this.state.Win == '1') {
+      return (
+        <View>
+          <View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              Excellent, keep going!
+            </Text>
+          </View>
+          <View style={{marginTop: 61}}>
+            <TouchableOpacity
+              onPress={() => this._nextPage()}
+              style={{alignItems: 'center'}}>
+              <Text style={{fontSize: 24, fontWeight: 'bold'}}>
+                Next Question
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+    if (this.state.Win == '2') {
+      return (
+        <View>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Wrong answer :(
+          </Text>
+          <View style={{marginTop: 61}}>
+            <TouchableOpacity
+              onPress={() => this._tryAgain()}
+              style={{alignItems: 'center'}}>
+              <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+  }
+  _gameOver() {
+    if (this.state.Win == '2') {
+      return (
+        <View style={{marginTop: 35, zIndex: -1}}>
+          <Text
+            style={{
+              fontSize: 48,
+
+              color: '#FA194F',
+              fontWeight: 'bold',
+            }}>
+            Game Over
+          </Text>
+        </View>
+      );
+    }
+  }
+
   render() {
     const renderItem = ({item}) => {
       return (
@@ -105,25 +194,40 @@ class QuestionPage extends Component {
     };
     return (
       <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
-        <View style={{marginTop: 135, marginBottom: 29}}>
-          <Text style={{fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
-            {this._question()}
-          </Text>
+        {this._gameOver()}
+        <View style={{marginTop: 135, zIndex: 1, marginBottom: 29}}>
+          {this._question()}
         </View>
-        <FlatList
-          data={this.props.QDATA.activeQuestion[1]}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.question}
-          scrollEnabled={false}
-        />
+        <View style={{height: 192}}>
+          <FlatList
+            data={this.props.QDATA.activeQuestion[1]}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.question}
+            scrollEnabled={false}
+          />
+        </View>
+        <View style={{marginTop: 39}}>{this._texts()}</View>
       </View>
     );
   }
 }
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      updateActiveQuestion,
+      updateQuestNum,
+      updateQuestionData,
+      increasePageNum,
+    },
+    dispatch,
+  );
 
 const mapStateToProps = (state) => {
   const {Page, QDATA} = state;
-  return {Page, QDATA};
+  return {
+    Page,
+    QDATA,
+  };
 };
 
-export default connect(mapStateToProps)(QuestionPage);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionPage);

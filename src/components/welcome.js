@@ -10,6 +10,7 @@ class Welcome extends Component {
   _start() {
     this.props.increasePageNum(this.props.Page.pageNum);
   }
+
   async componentDidMount() {
     try {
       const questionApiCall = await fetch(
