@@ -35,9 +35,15 @@ class QuestionPage extends Component {
       Answ: item,
     });
     if (item == this.state.correctAnswer) {
-      this.setState({
-        Win: '1',
-      });
+      if (this.props.QDATA.questNum < 14) {
+        this.setState({
+          Win: '1',
+        });
+      } else {
+        this.setState({
+          Win: '3',
+        });
+      }
     }
     if (item !== this.state.correctAnswer) {
       this.setState({
@@ -113,6 +119,12 @@ class QuestionPage extends Component {
       Win: 0,
     });
   }
+  _WON() {
+    this.setState({
+      Win: 0,
+    });
+    this.props.increasePageNum('1');
+  }
   _texts() {
     if (this.state.Win == '1') {
       return (
@@ -150,7 +162,21 @@ class QuestionPage extends Component {
         </View>
       );
     }
+    if (this.state.Win == '3') {
+      setTimeout(() => {
+        this._WON();
+      }, 10000);
+      return (
+        <View>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>WOW!!!</Text>
+          <View style={{marginTop: 61}}>
+            <Text style={{fontSize: 24, fontWeight: 'bold'}}>AMAZING!!!</Text>
+          </View>
+        </View>
+      );
+    }
   }
+
   _gameOver() {
     if (this.state.Win == '2') {
       return (
