@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, StyleSheet, Text} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {increasePageNum} from '../actions/pageAction';
@@ -73,7 +73,10 @@ class Welcome extends Component {
     return (
       <View style={{flex: 1}}>
         <View style={mainContainer}>
-          <TouchableOpacity>
+          <Image
+            style={{resizeMode: 'cover', height: 207, width: 189}}
+            source={require('../images/logo.png')}></Image>
+          <TouchableOpacity style={{marginTop: 28}}>
             <View>
               <TouchableOpacity onPress={() => this._start()}>
                 <Text style={buttonStyle}>GET STARTED</Text>

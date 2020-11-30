@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Text, FlatList} from 'react-native';
+import {TouchableOpacity, View, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
@@ -45,10 +46,21 @@ class WinPage extends Component {
           }}>
           With: {'\n'} <Text>200 Points</Text>
         </Text>
+        <Image
+          style={{resizeMode: 'cover', width: 164, height: 220}}
+          source={require('../images/cup.jpg')}
+        />
+        <Text style={{fontSize: 36, fontWeight: 'bold'}}>
+          Wanna Play Again?
+        </Text>
         <TouchableOpacity
           onPress={() => this._tryAgain()}
-          style={{alignItems: 'center'}}>
+          style={{alignItems: 'center', marginTop: 64}}>
           <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+          <AntDesign
+            style={{marginTop: 19}}
+            size={30}
+            name="reload1"></AntDesign>
         </TouchableOpacity>
       </View>
     );

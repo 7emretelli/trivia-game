@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Text, FlatList} from 'react-native';
 import {connect} from 'react-redux';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
@@ -141,6 +142,10 @@ class QuestionPage extends Component {
               <Text style={{fontSize: 24, fontWeight: 'bold'}}>
                 Next Question
               </Text>
+              <AntDesign
+                style={{marginTop: 19}}
+                size={30}
+                name="arrowright"></AntDesign>
             </TouchableOpacity>
           </View>
         </View>
@@ -157,6 +162,10 @@ class QuestionPage extends Component {
               onPress={() => this._tryAgain()}
               style={{alignItems: 'center'}}>
               <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+              <AntDesign
+                style={{marginTop: 19}}
+                size={30}
+                name="reload1"></AntDesign>
             </TouchableOpacity>
           </View>
         </View>
@@ -165,9 +174,9 @@ class QuestionPage extends Component {
     if (this.state.Win == '3') {
       setTimeout(() => {
         this._WON();
-      }, 10000);
+      }, 1000);
       return (
-        <View>
+        <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>WOW!!!</Text>
           <View style={{marginTop: 61}}>
             <Text style={{fontSize: 24, fontWeight: 'bold'}}>AMAZING!!!</Text>
