@@ -20,7 +20,7 @@ class Header extends Component {
               alignItems: 'flex-start',
             }}>
             <Text style={{marginTop: 45, fontSize: 16, fontWeight: 'bold'}}>
-              Question: {this.props.Page.questNum + 1} /{' '}
+              Question: {this.props.QDATA.questNum + 1} /{' '}
               {Object.keys(this.props.QDATA.QUESTIONS.results).length}
             </Text>
           </View>

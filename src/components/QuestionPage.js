@@ -7,16 +7,17 @@ import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {bindActionCreators} from 'redux';
+import {ANSWER_INDEX, QUESTION_INDEX} from '../util';
 
 class QuestionPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       correctAnswer: this.props.QDATA.QUESTIONS.results[
-        this.props.Page.questNum
+        this.props.QDATA.questNum
       ].correct_answer,
-      Answ: 0,
-      Win: 0,
+      answer: 0,
+      win: 0,
     };
   }
   componentDidMount() {
@@ -26,35 +27,35 @@ class QuestionPage extends Component {
     return (
       <View>
         <Text style={{fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
-          {this.props.QDATA.activeQuestion[0]}
+          {this.props.QDATA.activeQuestion[QUESTION_INDEX]}
         </Text>
       </View>
     );
   }
   _isClicked(item) {
     this.setState({
-      Answ: item,
+      answer: item,
     });
     if (item == this.state.correctAnswer) {
       if (this.props.QDATA.questNum < 14) {
         this.setState({
-          Win: '1',
+          win: 1,
         });
       } else {
         this.setState({
-          Win: '3',
+          win: 3,
         });
       }
     }
     if (item !== this.state.correctAnswer) {
       this.setState({
-        Win: '2',
+        win: 2,
       });
     }
   }
   _answerStyle(item) {
-    if (this.state.Answ == item) {
-      if (this.state.Answ == this.state.correctAnswer) {
+    if (this.state.answer == item) {
+      if (this.state.answer == this.state.correctAnswer) {
         return {
           backgroundColor: '#58E778',
           height: 32,
@@ -89,17 +90,17 @@ class QuestionPage extends Component {
   }
   _disable() {
     var True = True;
-    if (this.state.Answ !== 0) {
+    if (this.state.answer !== 0) {
       return {
         True,
       };
     }
   }
   _nextPage() {
-    this.props.updateQuestNum(this.props.Page.questNum);
+    this.props.updateQuestNum(this.props.QDATA.questNum);
     this.setState({
-      Win: 0,
-      Answ: 0,
+      win: 0,
+      answer: 0,
     });
     qNum = this.props.QDATA.questNum + 1;
     this.setState({
@@ -116,18 +117,18 @@ class QuestionPage extends Component {
     this.props.increasePageNum(pageNumber);
     this.setState({
       correctAnswer: null,
-      Answ: 0,
-      Win: 0,
+      answer: 0,
+      win: 0,
     });
   }
   _WON() {
     this.setState({
-      Win: 0,
+      win: 0,
     });
     this.props.increasePageNum('1');
   }
   _texts() {
-    if (this.state.Win == '1') {
+    if (this.state.win == 1) {
       return (
         <View>
           <View>
@@ -151,7 +152,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.Win == '2') {
+    if (this.state.win == 2) {
       return (
         <View>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
@@ -171,7 +172,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.Win == '3') {
+    if (this.state.win == '3') {
       setTimeout(() => {
         this._WON();
       }, 1000);
@@ -187,7 +188,7 @@ class QuestionPage extends Component {
   }
 
   _gameOver() {
-    if (this.state.Win == '2') {
+    if (this.state.win == '2') {
       return (
         <View style={{marginTop: 35, zIndex: -1}}>
           <Text
@@ -203,7 +204,28 @@ class QuestionPage extends Component {
       );
     }
   }
-
+  renderItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        disabled={this._disable()}
+        onPress={() => this._isClicked(item)}>
+        <View style={this._answerStyle(item)}>
+          <View>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 15,
+                fontWeight: 'bold',
+                marginHorizontal: 10,
+                flexShrink: 1,
+              }}>
+              {item}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
   render() {
     const renderItem = ({item}) => {
       return (
@@ -235,7 +257,7 @@ class QuestionPage extends Component {
         </View>
         <View style={{height: 192}}>
           <FlatList
-            data={this.props.QDATA.activeQuestion[1]}
+            data={this.props.QDATA.activeQuestion[ANSWER_INDEX]}
             renderItem={renderItem}
             keyExtractor={(item) => item.question}
             scrollEnabled={false}

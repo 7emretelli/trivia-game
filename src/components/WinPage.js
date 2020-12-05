@@ -7,6 +7,7 @@ import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {bindActionCreators} from 'redux';
+import Cup from '../images/cup.jpg';
 
 class WinPage extends Component {
   _tryAgain() {
@@ -48,7 +49,7 @@ class WinPage extends Component {
         </Text>
         <Image
           style={{resizeMode: 'cover', width: 164, height: 220}}
-          source={require('../images/cup.jpg')}
+          source={Cup}
         />
         <Text style={{fontSize: 36, fontWeight: 'bold'}}>
           Wanna Play Again?
@@ -77,8 +78,7 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = (state) => {
-  const {Page, QDATA} = state;
+const mapStateToProps = ({Page, QDATA}) => {
   return {
     Page,
     QDATA,

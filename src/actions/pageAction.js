@@ -1,4 +1,4 @@
-export const increasePageNum = (pagenumplus) => ({
+export const increasePageNum = (payload) => ({
   type: 'INC_PAGE',
-  payload: pagenumplus,
+  payload,
 });

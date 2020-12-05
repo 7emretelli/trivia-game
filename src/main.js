@@ -1,48 +1,28 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
-import Welcome from './components/welcome';
-import Header from './components/common/header';
-import QuestionPage from './components/QuestionPage';
-import WinPage from './components/WinPage';
+import {View, Text} from 'react-native';
+import WelcomeScreen from './screens/WelcomeScreen';
+import QuestionScreen from './screens/QuestionScreen.js';
+import WinScreen from './screens/WinScreen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
 
+AntDesign.loadFont();
+
 class Main extends Component {
-  Page() {
-    if (this.props.Page.pageNum == '0') {
-      return <Welcome></Welcome>;
-    }
-    if (this.props.Page.pageNum == '1') {
-      return (
-        <View style={{flex: 1, flexDirection: 'column'}}>
-          <View style={{flex: 0.1}}>
-            <Header></Header>
-          </View>
-          <View style={{flex: 0.9}}>
-            <QuestionPage></QuestionPage>
-          </View>
-        </View>
-      );
-    }
-    if (this.props.Page.pageNum == '2') {
-      return (
-        <View style={{flex: 1, flexDirection: 'column'}}>
-          <View style={{flex: 0.1}}>
-            <Header></Header>
-          </View>
-          <View style={{flex: 0.9}}>
-            <WinPage></WinPage>
-          </View>
-        </View>
-      );
-    }
-  }
   render() {
-    return <View style={{flex: 1}}>{this.Page()}</View>;
+    if (this.props.Page.pageNum == 0) {
+      return <WelcomeScreen />;
+    }
+    if (this.props.Page.pageNum == 1) {
+      return <QuestionScreen />;
+    }
+    if (this.props.Page.pageNum == 2) {
+      return <WinScreen />;
+    }
   }
 }
 
-const mapStateToProps = (state) => {
-  const {Page} = state;
+const mapStateToProps = ({Page}) => {
   return {Page};
 };
 

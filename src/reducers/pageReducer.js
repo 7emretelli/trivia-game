@@ -1,15 +1,11 @@
-const INITIAL_STATE = {
+const initialState = {
   pageNum: 0,
-  questNum: 0,
 };
 
-const pageReducer = (state = INITIAL_STATE, {type, payload}) => {
+const pageReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case 'INC_PAGE':
       return {...state, pageNum: parseInt(payload) + 1};
-    case 'INC_QNUM':
-      return {...state, questNum: parseInt(payload) + 1};
-
     default:
       return state;
   }
