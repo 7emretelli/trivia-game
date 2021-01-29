@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  Modal,
-} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -24,11 +17,12 @@ class WelcomeScreen extends Component {
     super(props);
     this.state = {
       isVisible: false,
+      selected: 'medium',
     };
   }
-  _start = () => {
+  start = () => {
     const {increasePageNum} = this.props;
-    increasePageNum(this.props.Page.pageNum);
+    increasePageNum(this.props.pageReducer.pageNum);
   };
 
   displayModal(show) {
@@ -45,16 +39,20 @@ class WelcomeScreen extends Component {
     }
 
     const answers = [
-      ...this.props.QDATA.QUESTIONS.results[this.props.QDATA.questNum]
-        .incorrect_answers,
-      this.props.QDATA.QUESTIONS.results[this.props.QDATA.questNum]
-        .correct_answer,
+      ...this.props.questionReducer.QUESTIONS.results[
+        this.props.questionReducer.QuestNum
+      ].incorrect_answers,
+      this.props.questionReducer.QUESTIONS.results[
+        this.props.questionReducer.QuestNum
+      ].correct_answer,
     ];
 
     let activeQuestion = [];
 
-    activeQuestion[QUESTION_INDEX] = this.props.QDATA.QUESTIONS.results[
-      this.props.QDATA.questNum
+    activeQuestion[
+      QUESTION_INDEX
+    ] = this.props.questionReducer.QUESTIONS.results[
+      this.props.questionReducer.QuestNum
     ].question;
 
     randomizedAnswers = shuffle(answers);
@@ -66,57 +64,13 @@ class WelcomeScreen extends Component {
     const {buttonStyle, mainContainer} = styles;
     return (
       <View style={{flex: 1}}>
-        <Modal
-          fullScreen={false}
-          animationType={'slide'}
-          visible={this.state.isVisible}
-          onRequestClose={() => this.displayModal(false)}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                backgroundColor: '#6BB1F1',
-                height: 409,
-                width: 346,
-                borderRadius: 10,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  alignItems: 'flex-end',
-                }}>
-                <TouchableOpacity onPress={() => this.displayModal(false)}>
-                  <AntDesign
-                    style={{marginRight: 10, marginTop: 10}}
-                    size={30}
-                    name="close"></AntDesign>
-                </TouchableOpacity>
-              </View>
-              <View style={{marginTop: 30, marginLeft: 20}}>
-                <View style={{marginBottom: 30}}>
-                  <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-                    Difficulty: Easy
-                  </Text>
-                </View>
-                <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-                  Category: All
-                </Text>
-              </View>
-            </View>
-          </View>
-        </Modal>
         <View style={mainContainer}>
           <Image
             style={{resizeMode: 'cover', height: 207, width: 189}}
             source={Logo}></Image>
           <View style={{marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
-              <TouchableOpacity onPress={this._start}>
+              <TouchableOpacity onPress={this.start}>
                 <Text style={buttonStyle}>GET STARTED</Text>
               </TouchableOpacity>
               <View>
@@ -157,9 +111,8 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = (state) => {
-  const {Page, QDATA} = state;
-  return {Page, QDATA};
+const mapStateToProps = ({pageReducer, questionReducer}) => {
+  return {pageReducer, questionReducer};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 class Header extends Component {
   render() {
+    const {questionReducer} = this.props;
     return (
       <View style={{flex: 1}}>
         <View
@@ -20,8 +21,8 @@ class Header extends Component {
               alignItems: 'flex-start',
             }}>
             <Text style={{marginTop: 45, fontSize: 16, fontWeight: 'bold'}}>
-              Question: {this.props.QDATA.questNum + 1} /{' '}
-              {Object.keys(this.props.QDATA.QUESTIONS.results).length}
+              Question: {questionReducer.QuestNum + 1} /{' '}
+              {Object.keys(questionReducer.QUESTIONS.results).length}
             </Text>
           </View>
           <View
@@ -46,8 +47,7 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const {Page, QDATA} = state;
-  return {Page, QDATA};
+const mapStateToProps = ({pageReducer, questionReducer}) => {
+  return {pageReducer, questionReducer};
 };
 export default connect(mapStateToProps)(Header);

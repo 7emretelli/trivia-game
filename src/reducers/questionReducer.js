@@ -3,7 +3,7 @@ const INITIAL_STATE = {
   activeQuestion: [],
   loading: true,
   Points: 0,
-  questNum: 0,
+  QuestNum: 0,
 };
 
 const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -15,8 +15,8 @@ const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
     default:
       return state;
     case 'INC_QNUM':
-      if (state.questNum < 14) {
-        qNum = parseInt(state.questNum) + 1;
+      if (state.QuestNum < 14) {
+        qNum = parseInt(state.QuestNum) + 1;
         function shuffle(array) {
           var currentIndex = array.length,
             temporaryValue,
@@ -55,7 +55,7 @@ const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
 
       return {
         ...state,
-        questNum: parseInt(payload) + 1,
+        QuestNum: parseInt(payload) + 1,
         activeQuestion: _activeQuestion,
       };
   }

@@ -10,13 +10,14 @@ import {bindActionCreators} from 'redux';
 import Cup from '../images/cup.jpg';
 
 class WinPage extends Component {
-  _tryAgain() {
+  tryAgain() {
+    const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
     activeQuestion = '';
     questionNumber = -1;
     pageNumber = -1;
-    this.props.updateActiveQuestion(activeQuestion);
-    this.props.updateQuestNum(questionNumber);
-    this.props.increasePageNum(pageNumber);
+    updateActiveQuestion(activeQuestion);
+    updateQuestNum(questionNumber);
+    increasePageNum(pageNumber);
   }
   render() {
     return (
@@ -55,7 +56,7 @@ class WinPage extends Component {
           Wanna Play Again?
         </Text>
         <TouchableOpacity
-          onPress={() => this._tryAgain()}
+          onPress={() => this.tryAgain()}
           style={{alignItems: 'center', marginTop: 64}}>
           <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
           <AntDesign
@@ -78,10 +79,10 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = ({Page, QDATA}) => {
+const mapStateToProps = ({pageReducer, questionReducer}) => {
   return {
-    Page,
-    QDATA,
+    pageReducer,
+    questionReducer,
   };
 };
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import Header from '../components/common/header';
+import Header from '../components/common/Header';
 import WinPage from '../components/WinPage';
 
 export default class WinScreen extends Component {

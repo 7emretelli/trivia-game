@@ -10,20 +10,20 @@ AntDesign.loadFont();
 
 class Main extends Component {
   render() {
-    if (this.props.Page.pageNum == 0) {
+    if (this.props.pageReducer.pageNum == 0) {
       return <WelcomeScreen />;
     }
-    if (this.props.Page.pageNum == 1) {
+    if (this.props.pageReducer.pageNum == 1) {
       return <QuestionScreen />;
     }
-    if (this.props.Page.pageNum == 2) {
+    if (this.props.pageReducer.pageNum == 2) {
       return <WinScreen />;
     }
   }
 }
 
-const mapStateToProps = ({Page}) => {
-  return {Page};
+const mapStateToProps = ({pageReducer}) => {
+  return {pageReducer};
 };
 
 export default connect(mapStateToProps)(Main);
