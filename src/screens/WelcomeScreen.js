@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, StyleSheet, Text, Image} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -18,18 +26,16 @@ class WelcomeScreen extends Component {
     this.state = {
       isVisible: false,
       selected: 'medium',
+      loading: false,
+      difficulty: 'medium',
+      category: 'General Knowledge',
     };
   }
-  start = () => {
+  start = async () => {
     const {increasePageNum} = this.props;
-    increasePageNum(this.props.pageReducer.pageNum);
-  };
-
-  displayModal(show) {
-    this.setState({isVisible: show});
-  }
-
-  async componentDidMount() {
+    this.setState({
+      loading: true,
+    });
     try {
       const questionApiCall = await fetch(URL);
       const data = await questionApiCall.json();
@@ -59,20 +65,107 @@ class WelcomeScreen extends Component {
     activeQuestion[ANSWER_INDEX] = randomizedAnswers;
 
     this.props.updateActiveQuestion(activeQuestion);
+
+    this.setState({
+      loading: false,
+    });
+
+    increasePageNum(this.props.pageReducer.pageNum);
+  };
+
+  displayModal(show) {
+    this.setState({isVisible: show});
   }
+
+  button() {
+    const {buttonStyle} = styles;
+    if (this.state.loading == true) {
+      return (
+        <View>
+          <ActivityIndicator size="large"></ActivityIndicator>
+        </View>
+      );
+    }
+    if (this.state.loading == false) {
+      return (
+        <View>
+          <TouchableOpacity onPress={this.start}>
+            <Text style={buttonStyle}>GET STARTED</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  }
+
   render() {
-    const {buttonStyle, mainContainer} = styles;
+    const {mainContainer} = styles;
     return (
       <View style={{flex: 1}}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.isVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                borderRadius: 15,
+                backgroundColor: '#6BB1F1',
+                height: 346,
+                width: 370,
+              }}>
+              <View style={{flex: 0.15, alignItems: 'flex-end'}}>
+                <View style={{marginRight: 15, marginTop: 15}}>
+                  <TouchableOpacity onPress={() => this.displayModal(false)}>
+                    <AntDesign name="close" size={30}></AntDesign>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 0.75,
+                  alignItems: 'center',
+                }}>
+                <View style={{flex: 0.1}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 24}}>
+                    Settings
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    padding: 16,
+                    flex: 0.9,
+                    flexDirection: 'row',
+                  }}>
+                  <View style={{flex: 1}}>
+                    <Text style={{fontSize: 24, fontWeight: 'bold'}}>
+                      Category: All
+                    </Text>
+                    <Text
+                      style={{marginTop: 10, fontSize: 24, fontWeight: 'bold'}}>
+                      Difficulty: Medium
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={{flex: 0.1}}></View>
+            </View>
+          </View>
+        </Modal>
         <View style={mainContainer}>
           <Image
             style={{resizeMode: 'cover', height: 207, width: 189}}
             source={Logo}></Image>
           <View style={{marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
-              <TouchableOpacity onPress={this.start}>
-                <Text style={buttonStyle}>GET STARTED</Text>
-              </TouchableOpacity>
+              {this.button()}
               <View>
                 <TouchableOpacity onPress={() => this.displayModal(true)}>
                   <AntDesign
@@ -83,6 +176,14 @@ class WelcomeScreen extends Component {
               </View>
             </View>
           </View>
+        </View>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 20,
+          }}>
+          <Text>by Emre Telli</Text>
         </View>
       </View>
     );
