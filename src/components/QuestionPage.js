@@ -15,7 +15,7 @@ class QuestionPage extends Component {
     const {questionReducer} = this.props;
     this.state = {
       correctAnswer:
-        questionReducer.QUESTIONS.results[questionReducer.QuestNum]
+        questionReducer.QUESTIONS.results[questionReducer.questNum]
           .correct_answer,
       answer: 0,
       win: 0,
@@ -37,7 +37,7 @@ class QuestionPage extends Component {
       answer: item,
     });
     if (item == this.state.correctAnswer) {
-      if (questionReducer.QuestNum < 14) {
+      if (questionReducer.questNum < 14) {
         this.setState({
           win: 1,
         });
@@ -98,12 +98,12 @@ class QuestionPage extends Component {
   }
   nextPage() {
     const {updateQuestNum, questionReducer} = this.props;
-    updateQuestNum(questionReducer.QuestNum);
+    updateQuestNum(questionReducer.questNum);
     this.setState({
       win: 0,
       answer: 0,
     });
-    qNum = questionReducer.QuestNum + 1;
+    qNum = questionReducer.questNum + 1;
     this.setState({
       correctAnswer: questionReducer.QUESTIONS.results[qNum].correct_answer,
     });
