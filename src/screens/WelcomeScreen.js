@@ -40,10 +40,10 @@ class WelcomeScreen extends Component {
 
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
-        this.props.questionReducer.QuestNum
+        this.props.questionReducer.questNum
       ].incorrect_answers,
       this.props.questionReducer.QUESTIONS.results[
-        this.props.questionReducer.QuestNum
+        this.props.questionReducer.questNum
       ].correct_answer,
     ];
 
@@ -52,7 +52,7 @@ class WelcomeScreen extends Component {
     activeQuestion[
       QUESTION_INDEX
     ] = this.props.questionReducer.QUESTIONS.results[
-      this.props.questionReducer.QuestNum
+      this.props.questionReducer.questNum
     ].question;
 
     randomizedAnswers = shuffle(answers);
