@@ -21,9 +21,6 @@ class QuestionPage extends Component {
       win: 0,
     };
   }
-  componentDidMount() {
-    console.log('doğru cevap: ', this.state.correctAnswer);
-  }
   question() {
     const {questionReducer} = this.props;
     return (
@@ -110,7 +107,6 @@ class QuestionPage extends Component {
     this.setState({
       correctAnswer: questionReducer.QUESTIONS.results[qNum].correct_answer,
     });
-    console.log(questionReducer.QUESTIONS.results[qNum].correct_answer);
   }
   tryAgain() {
     const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
@@ -131,7 +127,7 @@ class QuestionPage extends Component {
     this.setState({
       win: 0,
     });
-    increasePageNum('1');
+    increasePageNum(1);
   }
   texts() {
     if (this.state.win == 1) {

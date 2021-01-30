@@ -21,7 +21,7 @@ class Header extends Component {
               alignItems: 'flex-start',
             }}>
             <Text style={{marginTop: 45, fontSize: 16, fontWeight: 'bold'}}>
-              Question: {questionReducer.QuestNum + 1} /{' '}
+              Question: {questionReducer.questNum + 1} /{' '}
               {Object.keys(questionReducer.QUESTIONS.results).length}
             </Text>
           </View>
