@@ -19,6 +19,9 @@ class QuestionPage extends Component {
           .correct_answer,
       answer: 0,
       win: 0,
+      isJoker: 0,
+      disableAnswer1: null,
+      disableAnswer2: null,
     };
   }
   question() {
@@ -77,20 +80,43 @@ class QuestionPage extends Component {
         };
       }
     } else {
-      return {
-        backgroundColor: '#6BB1F1',
-        height: 32,
-        width: 294,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 21,
-        flexDirection: 'row',
-      };
+      if (
+        item == this.state.disableAnswer1 ||
+        item == this.state.disableAnswer2
+      ) {
+        return {
+          backgroundColor: '#F16B8B',
+          height: 32,
+          width: 294,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 21,
+          flexDirection: 'row',
+        };
+      } else {
+        return {
+          backgroundColor: '#6BB1F1',
+          height: 32,
+          width: 294,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 21,
+          flexDirection: 'row',
+        };
+      }
     }
   }
-  disable() {
+  disable(item) {
     var True = True;
     if (this.state.answer !== 0) {
+      return {
+        True,
+      };
+    }
+    if (
+      item == this.state.disableAnswer1 ||
+      item == this.state.disableAnswer2
+    ) {
       return {
         True,
       };
@@ -102,6 +128,7 @@ class QuestionPage extends Component {
     this.setState({
       win: 0,
       answer: 0,
+      isJoker: false,
     });
     qNum = questionReducer.questNum + 1;
     this.setState({
@@ -120,6 +147,7 @@ class QuestionPage extends Component {
       correctAnswer: null,
       answer: 0,
       win: 0,
+      isJoker: null,
     });
   }
   won() {
@@ -206,34 +234,47 @@ class QuestionPage extends Component {
       );
     }
   }
-  renderItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        disabled={this.disable()}
-        onPress={() => this.isClicked(item)}>
-        <View style={this.answerStyle(item)}>
-          <View>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 15,
-                fontWeight: 'bold',
-                marginHorizontal: 10,
-                flexShrink: 1,
-              }}>
-              {item}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+
+  useJoker() {
+    const {questionReducer} = this.props;
+    this.setState({
+      isJoker: true,
+    });
+
+    var answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
+    var i;
+    var newanswerslist = [];
+
+    for (i = 0; i < answerslist.length; i++) {
+      if (answerslist[i] != this.state.correctAnswer) {
+        newanswerslist.push(answerslist[i]);
+      }
+    }
+
+    let disable1 =
+      newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
+
+    let disable2 =
+      newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
+
+    console.log(disable1, disable2);
+    while (disable1 == disable2) {
+      let disable2 =
+        newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
+    }
+    console.log(disable1, disable2);
+    this.setState({
+      disableAnswer1: disable1,
+      disableAnswer2: disable2,
+    });
+  }
+
   render() {
     const {questionReducer} = this.props;
     const renderItem = ({item}) => {
       return (
         <TouchableOpacity
-          disabled={this.disable()}
+          disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
           <View style={this.answerStyle(item)}>
             <View>
@@ -253,9 +294,37 @@ class QuestionPage extends Component {
       );
     };
     return (
-      <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
         {this.gameOver()}
-        <View style={{marginTop: 135, zIndex: 1, marginBottom: 29}}>
+
+        <View
+          style={{
+            alignItems: 'flex-end',
+            marginTop: 105,
+            zIndex: 1,
+            marginBottom: 29,
+          }}>
+          <View
+            style={{
+              marginBottom: 10,
+              height: 30,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#F16B8B',
+              borderRadius: 5,
+            }}>
+            <TouchableOpacity
+              disabled={this.state.isJoker}
+              onPress={() => this.useJoker()}>
+              <Text style={{color: 'white', fontSize: 20}}>Use Joker</Text>
+            </TouchableOpacity>
+          </View>
           {this.question()}
         </View>
         <View style={{height: 192}}>

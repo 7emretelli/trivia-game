@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RNPickerSelect from 'react-native-picker-select';
+import LottieView from 'lottie-react-native';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
@@ -26,9 +27,10 @@ class WelcomeScreen extends Component {
       selected: 'medium',
       loading: false,
       difficulty: 'medium',
-      category: 10,
+      category: 9,
     };
   }
+
   start = async () => {
     const URL =
       'https://opentdb.com/api.php?amount=15&category=' +
