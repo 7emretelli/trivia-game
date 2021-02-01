@@ -11,14 +11,12 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import RNPickerSelect from 'react-native-picker-select';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {ANSWER_INDEX, QUESTION_INDEX, shuffle} from '../util';
 import Logo from '../images/logo.png';
-
-const URL =
-  'https://opentdb.com/api.php?amount=15&category=9&difficulty=medium&type=multiple';
 
 class WelcomeScreen extends Component {
   constructor(props) {
@@ -28,10 +26,16 @@ class WelcomeScreen extends Component {
       selected: 'medium',
       loading: false,
       difficulty: 'medium',
-      category: 'General Knowledge',
+      category: 10,
     };
   }
   start = async () => {
+    const URL =
+      'https://opentdb.com/api.php?amount=15&category=' +
+      this.state.category +
+      '&difficulty=' +
+      this.state.difficulty;
+    console.log(URL);
     const {increasePageNum} = this.props;
     this.setState({
       loading: true,
@@ -146,7 +150,18 @@ class WelcomeScreen extends Component {
                   }}>
                   <View style={{flex: 1}}>
                     <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-                      Category: All
+                      Category:{' '}
+                      <RNPickerSelect
+                        style={{fontSize: 24, fontWeight: 'bold'}}
+                        onValueChange={(value) =>
+                          this.setState({category: value})
+                        }
+                        items={[
+                          {label: 'General Knowledge', value: 9},
+                          {label: 'Entertainment: Books', value: 10},
+                          {label: 'Entertainment: Film', value: 11},
+                        ]}
+                      />
                     </Text>
                     <Text
                       style={{marginTop: 10, fontSize: 24, fontWeight: 'bold'}}>
