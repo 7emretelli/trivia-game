@@ -28,28 +28,27 @@ class WelcomeScreen extends Component {
       loading: false,
       difficulty: 'medium',
       category: 9,
+      settingsDisabled: false,
     };
   }
 
   start = async () => {
+    const {increasePageNum} = this.props;
+    this.setState({
+      loading: true,
+      settingsDisabled: true,
+    });
+
     const URL =
       'https://opentdb.com/api.php?amount=15&category=' +
       this.state.category +
       '&difficulty=' +
       this.state.difficulty +
       '&type=multiple';
-    console.log(URL);
-    const {increasePageNum} = this.props;
-    this.setState({
-      loading: true,
-    });
-    try {
-      const questionApiCall = await fetch(URL);
-      const data = await questionApiCall.json();
-      this.props.updateQuestionData(data);
-    } catch (err) {
-      console.log('Error to fetch data:', err);
-    }
+
+    const questionApiCall = await fetch(URL);
+    const data = await questionApiCall.json();
+    this.props.updateQuestionData(data);
 
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
@@ -75,6 +74,7 @@ class WelcomeScreen extends Component {
 
     this.setState({
       loading: false,
+      settingsDisabled: false,
     });
 
     increasePageNum(this.props.pageReducer.pageNum);
@@ -155,6 +155,7 @@ class WelcomeScreen extends Component {
                     <Text style={{fontSize: 24, fontWeight: 'bold'}}>
                       Category:{' '}
                       <RNPickerSelect
+                        disabled={this.state.settingsDisabled}
                         style={{fontSize: 24, fontWeight: 'bold'}}
                         onValueChange={(value) =>
                           this.setState({category: value})
@@ -200,6 +201,7 @@ class WelcomeScreen extends Component {
                       style={{marginTop: 10, fontSize: 24, fontWeight: 'bold'}}>
                       Difficulty:{' '}
                       <RNPickerSelect
+                        disabled={this.state.settingsDisabled}
                         style={{fontSize: 24, fontWeight: 'bold'}}
                         onValueChange={(value) =>
                           this.setState({difficulty: value})

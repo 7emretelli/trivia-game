@@ -19,7 +19,7 @@ class QuestionPage extends Component {
           .correct_answer,
       answer: 0,
       win: 0,
-      isJoker: 0,
+      isJoker: false,
       disableAnswer1: null,
       disableAnswer2: null,
     };
@@ -85,7 +85,7 @@ class QuestionPage extends Component {
         item == this.state.disableAnswer2
       ) {
         return {
-          backgroundColor: '#F16B8B',
+          backgroundColor: '#ec4646',
           height: 32,
           width: 294,
           justifyContent: 'center',
@@ -128,7 +128,6 @@ class QuestionPage extends Component {
     this.setState({
       win: 0,
       answer: 0,
-      isJoker: false,
     });
     qNum = questionReducer.questNum + 1;
     this.setState({
@@ -147,13 +146,16 @@ class QuestionPage extends Component {
       correctAnswer: null,
       answer: 0,
       win: 0,
-      isJoker: null,
+      isJoker: false,
     });
   }
   won() {
     const {increasePageNum} = this.props;
     this.setState({
       win: 0,
+    });
+    this.setState({
+      isJoker: false,
     });
     increasePageNum(1);
   }
@@ -237,11 +239,13 @@ class QuestionPage extends Component {
 
   useJoker() {
     const {questionReducer} = this.props;
+
     this.setState({
       isJoker: true,
     });
 
     var answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
+
     var i;
     var newanswerslist = [];
 
@@ -251,22 +255,58 @@ class QuestionPage extends Component {
       }
     }
 
-    let disable1 =
+    var disable1 =
+      newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
+    var disable2 =
       newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
 
-    let disable2 =
-      newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
-
-    console.log(disable1, disable2);
     while (disable1 == disable2) {
-      let disable2 =
+      var disable2 =
         newanswerslist[Math.floor(Math.random() * newanswerslist.length)];
     }
-    console.log(disable1, disable2);
     this.setState({
       disableAnswer1: disable1,
-      disableAnswer2: disable2,
     });
+    setTimeout(() => {
+      this.setState({
+        disableAnswer2: disable2,
+      });
+    }, 300);
+  }
+
+  buttonJoker() {
+    if (this.state.isJoker == true) {
+      return {
+        marginRight: 30,
+        marginTop: 50,
+        height: 30,
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#a6a9b6',
+        borderRadius: 5,
+      };
+    } else {
+      return {
+        marginRight: 30,
+        marginTop: 50,
+        height: 30,
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ec4646',
+        borderRadius: 5,
+      };
+    }
+  }
+
+  jokerDisable() {
+    const {questionReducer} = this.props;
+    if (this.state.isJoker == false) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   render() {
@@ -304,36 +344,38 @@ class QuestionPage extends Component {
 
         <View
           style={{
+            width: 400,
             alignItems: 'flex-end',
-            marginTop: 105,
-            zIndex: 1,
-            marginBottom: 29,
           }}>
-          <View
-            style={{
-              marginBottom: 10,
-              height: 30,
-              width: 100,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#F16B8B',
-              borderRadius: 5,
-            }}>
+          <View style={{alignItems: 'center', width: 400}}>
+            <View
+              style={{
+                width: 390,
+                marginTop: 100,
+                marginBottom: 29,
+              }}>
+              {this.question()}
+            </View>
+            <View style={{height: 192}}>
+              <FlatList
+                data={questionReducer.activeQuestion[ANSWER_INDEX]}
+                renderItem={renderItem}
+                keyExtractor={(item) => item}
+                scrollEnabled={false}
+              />
+            </View>
+          </View>
+          <View style={this.buttonJoker()}>
             <TouchableOpacity
-              disabled={this.state.isJoker}
-              onPress={() => this.useJoker()}>
-              <Text style={{color: 'white', fontSize: 20}}>Use Joker</Text>
+              disabled={this.jokerDisable()}
+              onPress={() => {
+                this.useJoker();
+              }}>
+              <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
+                Use Joker
+              </Text>
             </TouchableOpacity>
           </View>
-          {this.question()}
-        </View>
-        <View style={{height: 192}}>
-          <FlatList
-            data={questionReducer.activeQuestion[ANSWER_INDEX]}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.question}
-            scrollEnabled={false}
-          />
         </View>
         <View style={{marginTop: 39}}>{this.texts()}</View>
       </View>
