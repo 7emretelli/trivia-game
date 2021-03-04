@@ -28,7 +28,7 @@ class QuestionPage extends Component {
     const {questionReducer} = this.props;
     return (
       <View>
-        <Text style={{fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
+        <Text style={{fontWeight: 'bold', fontSize: 16, marginHorizontal: 10, textAlign: 'center'}}>
           {questionReducer.activeQuestion[QUESTION_INDEX]}
         </Text>
       </View>
@@ -61,21 +61,19 @@ class QuestionPage extends Component {
       if (this.state.answer == this.state.correctAnswer) {
         return {
           backgroundColor: '#58E778',
-          height: 32,
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 21,
+          marginBottom: 10,
           flexDirection: 'row',
         };
       } else {
         return {
-          backgroundColor: '#F16B8B',
-          height: 32,
+          backgroundColor: '#ec4646',
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 21,
+          marginBottom: 10,
           flexDirection: 'row',
         };
       }
@@ -85,22 +83,20 @@ class QuestionPage extends Component {
         item == this.state.disableAnswer2
       ) {
         return {
-          backgroundColor: '#ec4646',
-          height: 32,
+          backgroundColor: '#a6a9b6',
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 21,
+          marginBottom: 10,
           flexDirection: 'row',
         };
       } else {
         return {
           backgroundColor: '#6BB1F1',
-          height: 32,
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
-          marginBottom: 21,
+          marginBottom: 10,
           flexDirection: 'row',
         };
       }
@@ -133,6 +129,7 @@ class QuestionPage extends Component {
     this.setState({
       correctAnswer: questionReducer.QUESTIONS.results[qNum].correct_answer,
     });
+    console.log(questionReducer.QUESTIONS.results[qNum].correct_answer);
   }
   tryAgain() {
     const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
@@ -168,11 +165,11 @@ class QuestionPage extends Component {
               Excellent, keep going!
             </Text>
           </View>
-          <View style={{marginTop: 61}}>
+          <View>
             <TouchableOpacity
               onPress={() => this.nextPage()}
               style={{alignItems: 'center'}}>
-              <Text style={{fontSize: 24, fontWeight: 'bold'}}>
+              <Text style={{marginTop: 30,fontSize: 24, fontWeight: 'bold'}}>
                 Next Question
               </Text>
               <AntDesign
@@ -186,17 +183,17 @@ class QuestionPage extends Component {
     }
     if (this.state.win == 2) {
       return (
-        <View>
+        <View style={{flex: 1,}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
             Wrong answer :(
           </Text>
-          <View style={{marginTop: 61}}>
+          <View >
             <TouchableOpacity
               onPress={() => this.tryAgain()}
               style={{alignItems: 'center'}}>
-              <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+              <Text style={{marginTop: 30,fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
               <AntDesign
-                style={{marginTop: 19}}
+              style={{marginTop: 10}}
                 size={30}
                 name="reload1"></AntDesign>
             </TouchableOpacity>
@@ -211,7 +208,7 @@ class QuestionPage extends Component {
       return (
         <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>WOW!!!</Text>
-          <View style={{marginTop: 61}}>
+          <View style={{marginTop: 20}}>
             <Text style={{fontSize: 24, fontWeight: 'bold'}}>AMAZING!!!</Text>
           </View>
         </View>
@@ -222,7 +219,7 @@ class QuestionPage extends Component {
   gameOver() {
     if (this.state.win == '2') {
       return (
-        <View style={{marginTop: 35, zIndex: -1}}>
+        <View style={{flex: 1}}>
           <Text
             style={{
               fontSize: 48,
@@ -275,37 +272,49 @@ class QuestionPage extends Component {
   }
 
   buttonJoker() {
-    if (this.state.isJoker == true) {
-      return {
-        marginRight: 30,
-        marginTop: 50,
-        height: 30,
-        width: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#a6a9b6',
-        borderRadius: 5,
-      };
+
+    if (this.state.answer == 0) {
+      if (this.state.isJoker == true) {
+        return {
+          height: 30,
+          width: 100,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#a6a9b6',
+          borderRadius: 5,
+        };
+      } else {
+        return {
+          height: 30,
+          width: 100,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#ec4646',
+          borderRadius: 5,
+        };
+      }
     } else {
-      return {
-        marginRight: 30,
-        marginTop: 50,
-        height: 30,
-        width: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ec4646',
-        borderRadius: 5,
-      };
+     return{
+      height: 30,
+      width: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#a6a9b6',
+      borderRadius: 5,
+     } 
     }
+
   }
 
   jokerDisable() {
-    const {questionReducer} = this.props;
-    if (this.state.isJoker == false) {
-      return false;
-    } else {
+    if (this.state.win == 1) {
       return true;
+    } else {
+      if (this.state.isJoker == false) {
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 
@@ -317,18 +326,17 @@ class QuestionPage extends Component {
           disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
           <View style={this.answerStyle(item)}>
-            <View>
               <Text
                 style={{
+                  marginVertical: 5,
                   textAlign: 'center',
                   fontSize: 15,
                   fontWeight: 'bold',
                   marginHorizontal: 10,
                   flexShrink: 1,
                 }}>
-                {item}
+               {item}
               </Text>
-            </View>
           </View>
         </TouchableOpacity>
       );
@@ -340,44 +348,46 @@ class QuestionPage extends Component {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        {this.gameOver()}
 
-        <View
-          style={{
-            width: 400,
-            alignItems: 'flex-end',
-          }}>
-          <View style={{alignItems: 'center', width: 400}}>
-            <View
-              style={{
-                width: 390,
-                marginTop: 100,
-                marginBottom: 29,
-              }}>
-              {this.question()}
-            </View>
-            <View style={{height: 192}}>
-              <FlatList
-                data={questionReducer.activeQuestion[ANSWER_INDEX]}
-                renderItem={renderItem}
-                keyExtractor={(item) => item}
-                scrollEnabled={false}
-              />
+          <View style={{flex: 0.1}}>
+          {this.gameOver()}
+          </View>
+
+          <View style={{flex: 0.5 ,alignItems: 'flex-end'}}>
+            <View style={{flex: 0.1, justifyContent: 'flex-end'}}>
+              <View style={this.buttonJoker()}>
+                  <TouchableOpacity
+                    disabled={this.jokerDisable()}
+                    onPress={() => {
+                      this.useJoker();
+                    }}>
+                    <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
+                      Use Joker
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+            </View> 
+            <View style={{marginTop: 10,flex: 0.9, alignItems: 'center'}}>
+              <View
+                style={{
+                  marginBottom: 29,
+                }}>
+                {this.question()}
+              </View>
+              <View>
+                <FlatList
+                  data={questionReducer.activeQuestion[ANSWER_INDEX]}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item}
+                  scrollEnabled={false}
+                />
+              </View>
             </View>
           </View>
-          <View style={this.buttonJoker()}>
-            <TouchableOpacity
-              disabled={this.jokerDisable()}
-              onPress={() => {
-                this.useJoker();
-              }}>
-              <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
-                Use Joker
-              </Text>
-            </TouchableOpacity>
+
+          <View style={{flex: 0.4}}>
+            {this.texts()}
           </View>
-        </View>
-        <View style={{marginTop: 39}}>{this.texts()}</View>
       </View>
     );
   }

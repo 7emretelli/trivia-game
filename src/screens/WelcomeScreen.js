@@ -46,9 +46,14 @@ class WelcomeScreen extends Component {
       this.state.difficulty +
       '&type=multiple';
 
-    const questionApiCall = await fetch(URL);
+    const questionApiCall = await fetch(URL)
+
     const data = await questionApiCall.json();
     this.props.updateQuestionData(data);
+
+    console.log(this.props.questionReducer.QUESTIONS.results[
+      this.props.questionReducer.questNum
+    ].correct_answer)
 
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
@@ -58,6 +63,8 @@ class WelcomeScreen extends Component {
         this.props.questionReducer.questNum
       ].correct_answer,
     ];
+
+    
 
     let activeQuestion = [];
 

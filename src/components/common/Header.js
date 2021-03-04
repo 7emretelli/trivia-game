@@ -6,13 +6,14 @@ class Header extends Component {
   render() {
     const {questionReducer} = this.props;
     return (
-      <View style={{flex: 1}}>
         <View
           style={{
-            height: 90,
+            flex: 1,
             backgroundColor: '#8EDAA3',
             flexDirection: 'row',
+            alignItems: 'flex-end',
             paddingHorizontal: 24,
+            paddingBottom: 10
           }}>
           <View
             style={{
@@ -20,7 +21,7 @@ class Header extends Component {
               justifyContent: 'center',
               alignItems: 'flex-start',
             }}>
-            <Text style={{marginTop: 45, fontSize: 16, fontWeight: 'bold'}}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
               Question: {questionReducer.questNum + 1} /{' '}
               {Object.keys(questionReducer.QUESTIONS.results).length}
             </Text>
@@ -29,11 +30,10 @@ class Header extends Component {
             style={{
               flex: 0.5,
               justifyContent: 'center',
-              alignItems: 'flex-end',
+              alignItems: 'flex-end'
             }}>
             <Text
               style={{
-                marginTop: 45,
                 fontSize: 18,
                 fontWeight: 'bold',
                 right: 0,
@@ -42,7 +42,7 @@ class Header extends Component {
             </Text>
           </View>
         </View>
-      </View>
+
     );
   }
 }

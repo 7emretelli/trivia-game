@@ -7,10 +7,7 @@ export default class WinScreen extends Component {
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'column'}}>
-        <View style={{flex: 0.1}}>
-          <Header />
-        </View>
-        <View style={{flex: 0.9}}>
+        <View style={{flex: 1}}>
           <WinPage />
         </View>
       </View>
