@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
   Modal,
   ActivityIndicator,
 } from 'react-native';
@@ -17,7 +16,6 @@ import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {ANSWER_INDEX, QUESTION_INDEX, shuffle} from '../util';
-import Logo from '../images/logo.png';
 
 class WelcomeScreen extends Component {
   constructor(props) {
@@ -29,8 +27,35 @@ class WelcomeScreen extends Component {
       difficulty: 'medium',
       category: 9,
       settingsDisabled: false,
+      emojiNum: 0,
     };
   }
+
+  componentDidMount(){
+    var number = Math.floor(Math.random() * 4);
+    this.setState({
+      emojiNum: number
+    })
+  }
+
+  renderLottie(){
+    if (this.state.emojiNum == 0) {
+      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/flushed.json')} autoPlay loop/>
+    }
+    if (this.state.emojiNum == 1) {
+      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/shocked.json')} autoPlay loop/>
+    }
+    if (this.state.emojiNum == 2) {
+      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/silly.json')} autoPlay loop/>
+    }
+    if (this.state.emojiNum == 3) {
+      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/sleeping.json')} autoPlay loop/>
+    }
+    if (this.state.emojiNum == 4) {
+      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/vomiting.json')} autoPlay loop/>
+    }
+  }
+
 
   start = async () => {
     const {increasePageNum} = this.props;
@@ -227,11 +252,12 @@ class WelcomeScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={mainContainer}>
-          <Image
-            style={{resizeMode: 'cover', height: 207, width: 189}}
-            source={Logo}></Image>
-          <View style={{marginTop: 28}}>
+        <View style={{flex: 0.9},mainContainer}>
+          <View style={{flex: 0.4}}>
+            {this.renderLottie()}
+            
+          </View>
+          <View style={{flex: 0.2, marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
               {this.button()}
               <View>
@@ -247,6 +273,7 @@ class WelcomeScreen extends Component {
         </View>
         <View
           style={{
+            flex: 0.1,
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 20,

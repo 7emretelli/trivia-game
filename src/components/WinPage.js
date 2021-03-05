@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Text, Image} from 'react-native';
+import {TouchableOpacity, View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {increasePageNum} from '../actions/pageAction';
@@ -7,7 +7,7 @@ import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {bindActionCreators} from 'redux';
-import Cup from '../images/cup.jpg';
+import LottieView from 'lottie-react-native';
 
 class WinPage extends Component {
   tryAgain() {
@@ -19,6 +19,12 @@ class WinPage extends Component {
     updateQuestNum(questionNumber);
     increasePageNum(pageNumber);
   }
+
+  componentDidMount() {
+    this.animation.play(0, 60);
+  }
+
+  
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
@@ -48,10 +54,14 @@ class WinPage extends Component {
           }}>
           With: {'\n'} <Text>200 Points</Text>
         </Text>
-        <Image
-          style={{resizeMode: 'cover', width: 164, height: 220}}
-          source={Cup}
-        />
+        <View style={{height: 300}}>
+        <LottieView 
+        ref={animation => {
+          this.animation = animation;
+        }}
+        style={{flex:1, width: 1}}
+        source={require('../lotties/trophy.json')} loop={false} autoPlay/>
+        </View>
         <Text style={{fontSize: 36, fontWeight: 'bold'}}>
           Wanna Play Again?
         </Text>
