@@ -24,12 +24,17 @@ class QuestionPage extends Component {
       disableAnswer2: null,
     };
   }
+
+
+
+
+
   question() {
     const {questionReducer} = this.props;
     return (
       <View>
         <Text style={{fontWeight: 'bold', fontSize: 16, marginHorizontal: 10, textAlign: 'center'}}>
-          {questionReducer.activeQuestion[QUESTION_INDEX]}
+          {decodeURIComponent(questionReducer.activeQuestion[QUESTION_INDEX])}
         </Text>
       </View>
     );
@@ -335,7 +340,7 @@ class QuestionPage extends Component {
                   marginHorizontal: 10,
                   flexShrink: 1,
                 }}>
-               {item}
+               {decodeURIComponent(item)}
               </Text>
           </View>
         </TouchableOpacity>

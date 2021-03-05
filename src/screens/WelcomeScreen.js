@@ -65,7 +65,7 @@ class WelcomeScreen extends Component {
     });
 
     const URL =
-      'https://opentdb.com/api.php?amount=15&category=' +
+      'https://opentdb.com/api.php?amount=15&encode=url3986&category=' +
       this.state.category +
       '&difficulty=' +
       this.state.difficulty +
