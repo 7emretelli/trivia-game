@@ -116,12 +116,6 @@ class WelcomeScreen extends Component {
     const data = await questionApiCall.json();
     this.props.updateQuestionData(data);
 
-    console.log(
-      this.props.questionReducer.QUESTIONS.results[
-        this.props.questionReducer.questNum
-      ].correct_answer,
-    );
-
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
         this.props.questionReducer.questNum

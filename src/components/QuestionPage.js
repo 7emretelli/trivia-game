@@ -127,7 +127,6 @@ class QuestionPage extends Component {
     this.setState({
       correctAnswer: questionReducer.QUESTIONS.results[qNum].correct_answer,
     });
-    console.log(questionReducer.QUESTIONS.results[qNum].correct_answer);
   }
   tryAgain() {
     const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
