@@ -78,10 +78,11 @@ class QuestionPage extends Component {
 
   isClicked(item) {
     const {questionReducer} = this.props;
+    const {correctAnswer} = this.state;
     this.setState({
       answer: item,
     });
-    if (item == this.state.correctAnswer) {
+    if (item == correctAnswer) {
       if (questionReducer.questNum < 14) {
         this.setState({
           win: 1,
@@ -94,7 +95,7 @@ class QuestionPage extends Component {
         this.props.earnedPointsAction(this.state.time * 3);
       }
     }
-    if (item !== this.state.correctAnswer) {
+    if (item !== correctAnswer) {
       this.setState({
         win: 2,
       });
@@ -103,19 +104,24 @@ class QuestionPage extends Component {
   }
 
   answerStyle(item) {
-    if (this.state.answer == item) {
-      if (this.state.answer == this.state.correctAnswer) {
+    const {answer, correctAnswer, disableAnswer1, disableAnswer2} = this.state;
+    if (answer == item) {
+      if (answer == correctAnswer) {
         return {
           backgroundColor: '#58E778',
+<<<<<<< Updated upstream
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 15,
           flexDirection: 'row',
+=======
+>>>>>>> Stashed changes
         };
       } else {
         return {
           backgroundColor: '#ec4646',
+<<<<<<< Updated upstream
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
@@ -135,21 +141,33 @@ class QuestionPage extends Component {
           alignItems: 'center',
           marginBottom: 15,
           flexDirection: 'row',
+=======
+        };
+      }
+    } else {
+      if ([disableAnswer1, disableAnswer2].includes(item)) {
+        return {
+          backgroundColor: '#a6a9b6',
+>>>>>>> Stashed changes
         };
       } else {
         return {
           backgroundColor: '#6BB1F1',
+<<<<<<< Updated upstream
           width: 294,
           justifyContent: 'center',
           alignItems: 'center',
           marginBottom: 15,
           flexDirection: 'row',
+=======
+>>>>>>> Stashed changes
         };
       }
     }
   }
 
   disable(item) {
+<<<<<<< Updated upstream
     var True = True;
     if (this.state.answer !== 0) {
       return {
@@ -163,6 +181,14 @@ class QuestionPage extends Component {
       return {
         True,
       };
+=======
+    const {answer, disableAnswer1, disableAnswer2} = this.state;
+    if (answer !== 0) {
+      return true;
+    }
+    if ([disableAnswer1, disableAnswer2].includes(item)) {
+      return true;
+>>>>>>> Stashed changes
     }
   }
   nextPage() {
@@ -210,7 +236,9 @@ class QuestionPage extends Component {
     increasePageNum(1);
   }
   texts() {
-    if (this.state.win == 1) {
+    const {win} = this.state;
+
+    if (win == 1) {
       return (
         <View>
           <View>
@@ -234,7 +262,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.win == 2) {
+    if (win == 2) {
       return (
         <View style={{flex: 1}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
@@ -256,7 +284,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.win == '3') {
+    if (win == '3') {
       setTimeout(() => {
         this.won();
       }, 1000);
@@ -272,7 +300,8 @@ class QuestionPage extends Component {
   }
 
   gameOver() {
-    if (this.state.win == '2') {
+    const {win} = this.state;
+    if (win == '2') {
       return (
         <View style={{flex: 1}}>
           <Text
@@ -291,6 +320,7 @@ class QuestionPage extends Component {
 
   useJoker() {
     const {questionReducer} = this.props;
+    const {correctAnswer} = this.state;
 
     this.setState({
       isJoker: true,
@@ -302,7 +332,7 @@ class QuestionPage extends Component {
     var newanswerslist = [];
 
     for (i = 0; i < answerslist.length; i++) {
-      if (answerslist[i] != this.state.correctAnswer) {
+      if (answerslist[i] != correctAnswer) {
         newanswerslist.push(answerslist[i]);
       }
     }
@@ -327,8 +357,9 @@ class QuestionPage extends Component {
   }
 
   buttonJoker() {
-    if (this.state.answer == 0) {
-      if (this.state.isJoker == true) {
+    const {answer, isJoker} = this.state;
+    if (answer == 0) {
+      if (isJoker == true) {
         return {
           height: 30,
           width: 100,
@@ -360,10 +391,15 @@ class QuestionPage extends Component {
   }
 
   jokerDisable() {
+<<<<<<< Updated upstream
     if (this.state.win == 1 || this.state.win == 2) {
+=======
+    const {win, isJoker} = this.state;
+    if (win == 1) {
+>>>>>>> Stashed changes
       return true;
     } else {
-      if (this.state.isJoker == false) {
+      if (isJoker == false) {
         return false;
       } else {
         return true;
@@ -378,7 +414,17 @@ class QuestionPage extends Component {
         <TouchableOpacity
           disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
-          <View style={this.answerStyle(item)}>
+          <View
+            style={
+              ([this.answerStyle(item)],
+              {
+                width: 294,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10,
+                flexDirection: 'row',
+              })
+            }>
             <Text
               style={{
                 marginVertical: 5,
