@@ -109,86 +109,32 @@ class QuestionPage extends Component {
       if (answer == correctAnswer) {
         return {
           backgroundColor: '#58E778',
-<<<<<<< Updated upstream
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
-=======
->>>>>>> Stashed changes
         };
       } else {
         return {
           backgroundColor: '#ec4646',
-<<<<<<< Updated upstream
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
-        };
-      }
-    } else {
-      if (
-        item == this.state.disableAnswer1 ||
-        item == this.state.disableAnswer2
-      ) {
-        return {
-          backgroundColor: '#a6a9b6',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
-=======
         };
       }
     } else {
       if ([disableAnswer1, disableAnswer2].includes(item)) {
         return {
           backgroundColor: '#a6a9b6',
->>>>>>> Stashed changes
         };
       } else {
         return {
           backgroundColor: '#6BB1F1',
-<<<<<<< Updated upstream
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
-=======
->>>>>>> Stashed changes
         };
       }
     }
   }
 
   disable(item) {
-<<<<<<< Updated upstream
-    var True = True;
-    if (this.state.answer !== 0) {
-      return {
-        True,
-      };
-    }
-    if (
-      item == this.state.disableAnswer1 ||
-      item == this.state.disableAnswer2
-    ) {
-      return {
-        True,
-      };
-=======
     const {answer, disableAnswer1, disableAnswer2} = this.state;
     if (answer !== 0) {
       return true;
     }
     if ([disableAnswer1, disableAnswer2].includes(item)) {
       return true;
->>>>>>> Stashed changes
     }
   }
   nextPage() {
@@ -391,12 +337,8 @@ class QuestionPage extends Component {
   }
 
   jokerDisable() {
-<<<<<<< Updated upstream
-    if (this.state.win == 1 || this.state.win == 2) {
-=======
     const {win, isJoker} = this.state;
     if (win == 1) {
->>>>>>> Stashed changes
       return true;
     } else {
       if (isJoker == false) {
