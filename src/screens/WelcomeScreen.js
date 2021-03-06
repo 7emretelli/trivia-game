@@ -31,31 +31,65 @@ class WelcomeScreen extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     var number = Math.floor(Math.random() * 4);
     this.setState({
-      emojiNum: number
-    })
+      emojiNum: number,
+    });
   }
 
-  renderLottie(){
+  renderLottie() {
     if (this.state.emojiNum == 0) {
-      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/flushed.json')} autoPlay loop/>
+      return (
+        <LottieView
+          style={{flex: 1, width: 10}}
+          source={require('../lotties/flushed.json')}
+          autoPlay
+          loop
+        />
+      );
     }
     if (this.state.emojiNum == 1) {
-      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/shocked.json')} autoPlay loop/>
+      return (
+        <LottieView
+          style={{flex: 1, width: 10}}
+          source={require('../lotties/shocked.json')}
+          autoPlay
+          loop
+        />
+      );
     }
     if (this.state.emojiNum == 2) {
-      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/silly.json')} autoPlay loop/>
+      return (
+        <LottieView
+          style={{flex: 1, width: 10}}
+          source={require('../lotties/silly.json')}
+          autoPlay
+          loop
+        />
+      );
     }
     if (this.state.emojiNum == 3) {
-      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/sleeping.json')} autoPlay loop/>
+      return (
+        <LottieView
+          style={{flex: 1, width: 10}}
+          source={require('../lotties/sleeping.json')}
+          autoPlay
+          loop
+        />
+      );
     }
     if (this.state.emojiNum == 4) {
-      return <LottieView style={{flex:1, width: 10}} source={require('../lotties/vomiting.json')} autoPlay loop/>
+      return (
+        <LottieView
+          style={{flex: 1, width: 10}}
+          source={require('../lotties/vomiting.json')}
+          autoPlay
+          loop
+        />
+      );
     }
   }
-
 
   start = async () => {
     const {increasePageNum} = this.props;
@@ -71,14 +105,16 @@ class WelcomeScreen extends Component {
       this.state.difficulty +
       '&type=multiple';
 
-    const questionApiCall = await fetch(URL)
+    const questionApiCall = await fetch(URL);
 
     const data = await questionApiCall.json();
     this.props.updateQuestionData(data);
 
-    console.log(this.props.questionReducer.QUESTIONS.results[
-      this.props.questionReducer.questNum
-    ].correct_answer)
+    console.log(
+      this.props.questionReducer.QUESTIONS.results[
+        this.props.questionReducer.questNum
+      ].correct_answer,
+    );
 
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
@@ -88,8 +124,6 @@ class WelcomeScreen extends Component {
         this.props.questionReducer.questNum
       ].correct_answer,
     ];
-
-    
 
     let activeQuestion = [];
 
@@ -145,7 +179,7 @@ class WelcomeScreen extends Component {
           transparent={true}
           visible={this.state.isVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            Alert.alert('Settings Saved');
           }}>
           <View
             style={{
@@ -252,12 +286,9 @@ class WelcomeScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={{flex: 0.9},mainContainer}>
-          <View style={{flex: 0.4}}>
-            {this.renderLottie()}
-            
-          </View>
-          <View style={{flex: 0.2, marginTop: 28}}>
+        <View style={({flex: 0.9}, mainContainer)}>
+          <View style={{flex: 0.4}}>{this.renderLottie()}</View>
+          <View style={{flex: 0.1, marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
               {this.button()}
               <View>
@@ -269,6 +300,18 @@ class WelcomeScreen extends Component {
                 </TouchableOpacity>
               </View>
             </View>
+          </View>
+          <View
+            style={{
+              flex: 0.2,
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+              My Points:{'\n\n'}
+              {this.props.profileReducer.points}
+            </Text>
           </View>
         </View>
         <View
@@ -307,8 +350,8 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
-  return {pageReducer, questionReducer};
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
+  return {pageReducer, questionReducer, profileReducer};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

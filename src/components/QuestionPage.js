@@ -6,6 +6,8 @@ import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
+import {earnedPointsAction} from '../actions/earnedPointsAction';
+import {clearEarnedPointsAction} from '../actions/clearEarnedPointsAction';
 import {bindActionCreators} from 'redux';
 import {ANSWER_INDEX, QUESTION_INDEX} from '../util';
 
@@ -30,27 +32,31 @@ class QuestionPage extends Component {
     this.countDownTimer();
   }
 
-  countDownTimer() {
-    this.myInterval = setInterval(() => {
-      const {time, answer} = this.state;
+  countDownTimer(clear) {
+    if (clear == 'clear') {
+      clearInterval(this.myInterval);
+    } else {
+      this.myInterval = setInterval(() => {
+        const {time, answer} = this.state;
 
-      if (answer !== null) {
-        clearInterval(this.myInterval);
-      }
-
-      if (time > 0) {
-        this.setState(({time}) => ({
-          time: time - 1,
-        }));
-      }
-      if (time === 0) {
-        this.setState({
-          win: 2,
-          answer: 1,
-        });
-        clearInterval(this.myInterval);
-      }
-    }, 1000);
+        if (time > 0) {
+          if (answer == 0) {
+            this.setState(({time}) => ({
+              time: time - 1,
+            }));
+          } else {
+            clearInterval(this.myInterval);
+          }
+        }
+        if (time === 0) {
+          this.setState({
+            win: 2,
+            answer: 1,
+          });
+          clearInterval(this.myInterval);
+        }
+      }, 1000);
+    }
   }
 
   question() {
@@ -69,6 +75,7 @@ class QuestionPage extends Component {
       </View>
     );
   }
+
   isClicked(item) {
     const {questionReducer} = this.props;
     this.setState({
@@ -79,18 +86,22 @@ class QuestionPage extends Component {
         this.setState({
           win: 1,
         });
+        this.props.earnedPointsAction(this.state.time * 5);
       } else {
         this.setState({
           win: 3,
         });
+        this.props.earnedPointsAction(this.state.time * 5);
       }
     }
     if (item !== this.state.correctAnswer) {
       this.setState({
         win: 2,
       });
+      this.props.clearEarnedPointsAction();
     }
   }
+
   answerStyle(item) {
     if (this.state.answer == item) {
       if (this.state.answer == this.state.correctAnswer) {
@@ -137,6 +148,7 @@ class QuestionPage extends Component {
       }
     }
   }
+
   disable(item) {
     var True = True;
     if (this.state.answer !== 0) {
@@ -156,9 +168,13 @@ class QuestionPage extends Component {
   nextPage() {
     const {updateQuestNum, questionReducer} = this.props;
     updateQuestNum(questionReducer.questNum);
+    this.countDownTimer('clear');
+    this.countDownTimer();
+
     this.setState({
       win: 0,
       answer: 0,
+      time: 15,
     });
     qNum = questionReducer.questNum + 1;
     this.setState({
@@ -179,10 +195,12 @@ class QuestionPage extends Component {
       answer: 0,
       win: 0,
       isJoker: false,
+      time: 15,
     });
   }
   won() {
     const {increasePageNum} = this.props;
+
     this.setState({
       win: 0,
     });
@@ -462,14 +480,17 @@ const mapDispatchToProps = (dispatch) =>
       updateQuestNum,
       updateQuestionData,
       increasePageNum,
+      clearEarnedPointsAction,
+      earnedPointsAction,
     },
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
   return {
     pageReducer,
     questionReducer,
+    profileReducer,
   };
 };
 
