@@ -309,7 +309,7 @@ class WelcomeScreen extends Component {
             }}>
             <Text
               style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
-              My Points:{'\n\n'}
+              My Points:{'\n'}
               {this.props.profileReducer.points}
             </Text>
           </View>

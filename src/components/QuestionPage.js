@@ -86,12 +86,12 @@ class QuestionPage extends Component {
         this.setState({
           win: 1,
         });
-        this.props.earnedPointsAction(this.state.time * 5);
+        this.props.earnedPointsAction(this.state.time * 3);
       } else {
         this.setState({
           win: 3,
         });
-        this.props.earnedPointsAction(this.state.time * 5);
+        this.props.earnedPointsAction(this.state.time * 3);
       }
     }
     if (item !== this.state.correctAnswer) {
