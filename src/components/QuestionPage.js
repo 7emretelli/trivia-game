@@ -25,15 +25,17 @@ class QuestionPage extends Component {
     };
   }
 
-
-
-
-
   question() {
     const {questionReducer} = this.props;
     return (
       <View>
-        <Text style={{fontWeight: 'bold', fontSize: 16, marginHorizontal: 10, textAlign: 'center'}}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+            marginHorizontal: 10,
+            textAlign: 'center',
+          }}>
           {decodeURIComponent(questionReducer.activeQuestion[QUESTION_INDEX])}
         </Text>
       </View>
@@ -84,8 +86,7 @@ class QuestionPage extends Component {
       }
     } else {
       if (
-        item == this.state.disableAnswer1 ||
-        item == this.state.disableAnswer2
+        [this.state.disableAnswer1, this.state.disableAnswer2].includes(item)
       ) {
         return {
           backgroundColor: '#a6a9b6',
@@ -108,19 +109,11 @@ class QuestionPage extends Component {
     }
   }
   disable(item) {
-    var True = True;
     if (this.state.answer !== 0) {
-      return {
-        True,
-      };
+      return true;
     }
-    if (
-      item == this.state.disableAnswer1 ||
-      item == this.state.disableAnswer2
-    ) {
-      return {
-        True,
-      };
+    if ([this.state.disableAnswer1, this.state.disableAnswer2].includes(item)) {
+      return true;
     }
   }
   nextPage() {
@@ -174,7 +167,7 @@ class QuestionPage extends Component {
             <TouchableOpacity
               onPress={() => this.nextPage()}
               style={{alignItems: 'center'}}>
-              <Text style={{marginTop: 30,fontSize: 24, fontWeight: 'bold'}}>
+              <Text style={{marginTop: 30, fontSize: 24, fontWeight: 'bold'}}>
                 Next Question
               </Text>
               <AntDesign
@@ -188,17 +181,19 @@ class QuestionPage extends Component {
     }
     if (this.state.win == 2) {
       return (
-        <View style={{flex: 1,}}>
+        <View style={{flex: 1}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
             Wrong answer :(
           </Text>
-          <View >
+          <View>
             <TouchableOpacity
               onPress={() => this.tryAgain()}
               style={{alignItems: 'center'}}>
-              <Text style={{marginTop: 30,fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+              <Text style={{marginTop: 30, fontSize: 24, fontWeight: 'bold'}}>
+                Try Again
+              </Text>
               <AntDesign
-              style={{marginTop: 10}}
+                style={{marginTop: 10}}
                 size={30}
                 name="reload1"></AntDesign>
             </TouchableOpacity>
@@ -277,38 +272,21 @@ class QuestionPage extends Component {
   }
 
   buttonJoker() {
-
     if (this.state.answer == 0) {
       if (this.state.isJoker == true) {
         return {
-          height: 30,
-          width: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
           backgroundColor: '#a6a9b6',
-          borderRadius: 5,
         };
       } else {
         return {
-          height: 30,
-          width: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
           backgroundColor: '#ec4646',
-          borderRadius: 5,
         };
       }
     } else {
-     return{
-      height: 30,
-      width: 100,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#a6a9b6',
-      borderRadius: 5,
-     } 
+      return {
+        backgroundColor: '#a6a9b6',
+      };
     }
-
   }
 
   jokerDisable() {
@@ -331,17 +309,17 @@ class QuestionPage extends Component {
           disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
           <View style={this.answerStyle(item)}>
-              <Text
-                style={{
-                  marginVertical: 5,
-                  textAlign: 'center',
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                  marginHorizontal: 10,
-                  flexShrink: 1,
-                }}>
-               {decodeURIComponent(item)}
-              </Text>
+            <Text
+              style={{
+                marginVertical: 5,
+                textAlign: 'center',
+                fontSize: 15,
+                fontWeight: 'bold',
+                marginHorizontal: 10,
+                flexShrink: 1,
+              }}>
+              {decodeURIComponent(item)}
+            </Text>
           </View>
         </TouchableOpacity>
       );
@@ -353,46 +331,52 @@ class QuestionPage extends Component {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
+        <View style={{flex: 0.1}}>{this.gameOver()}</View>
 
-          <View style={{flex: 0.1}}>
-          {this.gameOver()}
-          </View>
-
-          <View style={{flex: 0.5 ,alignItems: 'flex-end'}}>
-            <View style={{flex: 0.1, justifyContent: 'flex-end'}}>
-              <View style={this.buttonJoker()}>
-                  <TouchableOpacity
-                    disabled={this.jokerDisable()}
-                    onPress={() => {
-                      this.useJoker();
-                    }}>
-                    <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
-                      Use Joker
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-            </View> 
-            <View style={{marginTop: 10,flex: 0.9, alignItems: 'center'}}>
-              <View
-                style={{
-                  marginBottom: 29,
+        <View style={{flex: 0.5, alignItems: 'flex-end'}}>
+          <View style={{flex: 0.1, justifyContent: 'flex-end'}}>
+            <View
+              style={[
+                this.buttonJoker(),
+                {
+                  height: 30,
+                  width: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 5,
+                },
+              ]}>
+              <TouchableOpacity
+                disabled={this.jokerDisable()}
+                onPress={() => {
+                  this.useJoker();
                 }}>
-                {this.question()}
-              </View>
-              <View>
-                <FlatList
-                  data={questionReducer.activeQuestion[ANSWER_INDEX]}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item}
-                  scrollEnabled={false}
-                />
-              </View>
+                <Text
+                  style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
+                  Use Joker
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-
-          <View style={{flex: 0.4}}>
-            {this.texts()}
+          <View style={{marginTop: 10, flex: 0.9, alignItems: 'center'}}>
+            <View
+              style={{
+                marginBottom: 29,
+              }}>
+              {this.question()}
+            </View>
+            <View>
+              <FlatList
+                data={questionReducer.activeQuestion[ANSWER_INDEX]}
+                renderItem={renderItem}
+                keyExtractor={(item) => item}
+                scrollEnabled={false}
+              />
+            </View>
           </View>
+        </View>
+
+        <View style={{flex: 0.4}}>{this.texts()}</View>
       </View>
     );
   }
