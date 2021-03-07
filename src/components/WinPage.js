@@ -7,13 +7,21 @@ import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
 import {increasePointsAction} from '../actions/increasePointsAction';
+import trophy from '../lotties/trophy.json';
 import {bindActionCreators} from 'redux';
 import LottieView from 'lottie-react-native';
 
 class WinPage extends Component {
   tryAgain() {
-    this.props.increasePointsAction(this.props.profileReducer.earnedPerQuiz);
-    const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
+    const {
+      increasePointsAction,
+      profileReducer,
+      updateActiveQuestion,
+      updateQuestNum,
+      increasePageNum,
+    } = this.props;
+
+    increasePointsAction(profileReducer.earnedPerQuiz);
     activeQuestion = '';
     questionNumber = -1;
     pageNumber = -1;
@@ -62,7 +70,7 @@ class WinPage extends Component {
               this.animation = animation;
             }}
             style={{flex: 1, width: 1}}
-            source={require('../lotties/trophy.json')}
+            source={trophy}
             loop={false}
             autoPlay
           />

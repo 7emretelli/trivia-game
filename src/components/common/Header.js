@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 
 class Header extends Component {
   renderPoints() {
-    if (this.props.profileReducer.earnedPerQuiz > 0) {
+    const {profileReducer} = this.props;
+    if (profileReducer.earnedPerQuiz > 0) {
       return (
         <View
           style={{
@@ -18,8 +19,7 @@ class Header extends Component {
               fontWeight: 'bold',
               right: 0,
             }}>
-            + {this.props.profileReducer.earnedPerQuiz} |{' '}
-            {this.props.profileReducer.points} Points
+            + {profileReducer.earnedPerQuiz} | {profileReducer.points} Points
           </Text>
         </View>
       );
@@ -37,7 +37,7 @@ class Header extends Component {
               fontWeight: 'bold',
               right: 0,
             }}>
-            {this.props.profileReducer.points} Points
+            {profileReducer.points} Points
           </Text>
         </View>
       );
@@ -45,7 +45,7 @@ class Header extends Component {
   }
 
   render() {
-    const {questionReducer, profileReducer} = this.props;
+    const {questionReducer} = this.props;
     return (
       <View
         style={{

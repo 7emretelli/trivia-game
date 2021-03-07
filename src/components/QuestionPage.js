@@ -77,92 +77,71 @@ class QuestionPage extends Component {
   }
 
   isClicked(item) {
-    const {questionReducer} = this.props;
+    const {
+      questionReducer,
+      earnedPointsAction,
+      clearEarnedPointsAction,
+    } = this.props;
+
+    const {correctAnswer, time} = this.state;
+
     this.setState({
       answer: item,
     });
-    if (item == this.state.correctAnswer) {
+    if (item == correctAnswer) {
       if (questionReducer.questNum < 14) {
         this.setState({
           win: 1,
         });
-        this.props.earnedPointsAction(this.state.time * 3);
+        earnedPointsAction(time * 3);
       } else {
         this.setState({
           win: 3,
         });
-        this.props.earnedPointsAction(this.state.time * 3);
+        earnedPointsAction(time * 3);
       }
     }
-    if (item !== this.state.correctAnswer) {
+    if (item !== correctAnswer) {
       this.setState({
         win: 2,
       });
-      this.props.clearEarnedPointsAction();
+      clearEarnedPointsAction();
     }
   }
 
   answerStyle(item) {
-    if (this.state.answer == item) {
-      if (this.state.answer == this.state.correctAnswer) {
+    const {answer, disableAnswer1, disableAnswer2} = this.state;
+
+    if (answer == item) {
+      if (answer == this.state.correctAnswer) {
         return {
           backgroundColor: '#58E778',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
         };
       } else {
         return {
           backgroundColor: '#ec4646',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
         };
       }
     } else {
-      if (
-        item == this.state.disableAnswer1 ||
-        item == this.state.disableAnswer2
-      ) {
+      if ([disableAnswer1, disableAnswer2].includes(item)) {
         return {
           backgroundColor: '#a6a9b6',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
         };
       } else {
         return {
           backgroundColor: '#6BB1F1',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 15,
-          flexDirection: 'row',
         };
       }
     }
   }
 
   disable(item) {
-    var True = True;
-    if (this.state.answer !== 0) {
-      return {
-        True,
-      };
+    const {answer, disableAnswer1, disableAnswer2} = this.state;
+    if (answer !== 0) {
+      return true;
     }
-    if (
-      item == this.state.disableAnswer1 ||
-      item == this.state.disableAnswer2
-    ) {
-      return {
-        True,
-      };
+    if ([disableAnswer1, disableAnswer2].includes(item)) {
+      return true;
     }
   }
   nextPage() {
@@ -180,7 +159,6 @@ class QuestionPage extends Component {
     this.setState({
       correctAnswer: questionReducer.QUESTIONS.results[qNum].correct_answer,
     });
-    console.log(questionReducer.QUESTIONS.results[qNum].correct_answer);
   }
   tryAgain() {
     const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
@@ -210,7 +188,9 @@ class QuestionPage extends Component {
     increasePageNum(1);
   }
   texts() {
-    if (this.state.win == 1) {
+    const {win} = this.state;
+
+    if (win == 1) {
       return (
         <View>
           <View>
@@ -234,7 +214,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.win == 2) {
+    if (win == 2) {
       return (
         <View style={{flex: 1}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
@@ -256,7 +236,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (this.state.win == '3') {
+    if (win == '3') {
       setTimeout(() => {
         this.won();
       }, 1000);
@@ -272,13 +252,12 @@ class QuestionPage extends Component {
   }
 
   gameOver() {
-    if (this.state.win == '2') {
+    if (win == '2') {
       return (
         <View style={{flex: 1}}>
           <Text
             style={{
               fontSize: 48,
-
               color: '#FA194F',
               fontWeight: 'bold',
             }}>
@@ -291,18 +270,19 @@ class QuestionPage extends Component {
 
   useJoker() {
     const {questionReducer} = this.props;
+    const {correctAnswer} = this.state;
 
     this.setState({
       isJoker: true,
     });
 
-    var answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
+    let answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
 
-    var i;
-    var newanswerslist = [];
+    let i;
+    let newanswerslist = [];
 
     for (i = 0; i < answerslist.length; i++) {
-      if (answerslist[i] != this.state.correctAnswer) {
+      if (answerslist[i] != correctAnswer) {
         newanswerslist.push(answerslist[i]);
       }
     }
@@ -327,43 +307,20 @@ class QuestionPage extends Component {
   }
 
   buttonJoker() {
-    if (this.state.answer == 0) {
-      if (this.state.isJoker == true) {
-        return {
-          height: 30,
-          width: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#a6a9b6',
-          borderRadius: 5,
-        };
-      } else {
-        return {
-          height: 30,
-          width: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#ec4646',
-          borderRadius: 5,
-        };
-      }
-    } else {
-      return {
-        height: 30,
-        width: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#a6a9b6',
-        borderRadius: 5,
-      };
-    }
+    const {answer, isJoker} = this.state;
+
+    return {
+      backgroundColor: answer == 0 && !isJoker ? '#ec4646' : '#a6a9b6',
+    };
   }
 
   jokerDisable() {
-    if (this.state.win == 1 || this.state.win == 2) {
+    const {win, isJoker} = this.state;
+
+    if (win == 1 || win == 2) {
       return true;
     } else {
-      if (this.state.isJoker == false) {
+      if (isJoker == false) {
         return false;
       } else {
         return true;
@@ -378,7 +335,17 @@ class QuestionPage extends Component {
         <TouchableOpacity
           disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
-          <View style={this.answerStyle(item)}>
+          <View
+            style={[
+              this.answerStyle(item),
+              {
+                width: 294,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 15,
+                flexDirection: 'row',
+              },
+            ]}>
             <Text
               style={{
                 marginVertical: 5,
@@ -436,7 +403,17 @@ class QuestionPage extends Component {
                 justifyContent: 'center',
                 alignItems: 'flex-end',
               }}>
-              <View style={this.buttonJoker()}>
+              <View
+                style={[
+                  this.buttonJoker(),
+                  {
+                    height: 30,
+                    width: 100,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 5,
+                  },
+                ]}>
                 <TouchableOpacity
                   disabled={this.jokerDisable()}
                   onPress={() => {

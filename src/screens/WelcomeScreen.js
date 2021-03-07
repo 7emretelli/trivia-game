@@ -15,7 +15,19 @@ import LottieView from 'lottie-react-native';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
-import {ANSWER_INDEX, QUESTION_INDEX, shuffle} from '../util';
+import flushed from '../lotties/flushed.json';
+import silly from '../lotties/silly.json';
+import sleeping from '../lotties/sleeping.json';
+import shocked from '../lotties/shocked.json';
+import trophy from '../lotties/trophy.json';
+import vomiting from '../lotties/vomiting.json';
+import {
+  ANSWER_INDEX,
+  modalCategories,
+  modalDifficulty,
+  QUESTION_INDEX,
+  shuffle,
+} from '../util';
 
 class WelcomeScreen extends Component {
   constructor(props) {
@@ -32,7 +44,7 @@ class WelcomeScreen extends Component {
   }
 
   componentDidMount() {
-    var number = Math.floor(Math.random() * 4);
+    var number = Math.floor(Math.random() * 5);
     this.setState({
       emojiNum: number,
     });
@@ -43,7 +55,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/flushed.json')}
+          source={flushed}
           autoPlay
           loop
         />
@@ -53,7 +65,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/shocked.json')}
+          source={shocked}
           autoPlay
           loop
         />
@@ -61,19 +73,14 @@ class WelcomeScreen extends Component {
     }
     if (this.state.emojiNum == 2) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/silly.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{flex: 1, width: 10}} source={silly} autoPlay loop />
       );
     }
     if (this.state.emojiNum == 3) {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/sleeping.json')}
+          source={sleeping}
           autoPlay
           loop
         />
@@ -83,7 +90,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/vomiting.json')}
+          source={vomiting}
           autoPlay
           loop
         />
@@ -109,12 +116,6 @@ class WelcomeScreen extends Component {
 
     const data = await questionApiCall.json();
     this.props.updateQuestionData(data);
-
-    console.log(
-      this.props.questionReducer.QUESTIONS.results[
-        this.props.questionReducer.questNum
-      ].correct_answer,
-    );
 
     const answers = [
       ...this.props.questionReducer.QUESTIONS.results[
@@ -151,19 +152,17 @@ class WelcomeScreen extends Component {
   }
 
   button() {
-    const {buttonStyle} = styles;
-    if (this.state.loading == true) {
+    if (this.state.loading) {
       return (
         <View>
           <ActivityIndicator size="large"></ActivityIndicator>
         </View>
       );
-    }
-    if (this.state.loading == false) {
+    } else {
       return (
         <View>
           <TouchableOpacity onPress={this.start}>
-            <Text style={buttonStyle}>GET STARTED</Text>
+            <Text style={styles.buttonStyle}>GET STARTED</Text>
           </TouchableOpacity>
         </View>
       );
@@ -171,7 +170,6 @@ class WelcomeScreen extends Component {
   }
 
   render() {
-    const {mainContainer} = styles;
     return (
       <View style={{flex: 1}}>
         <Modal
@@ -226,41 +224,7 @@ class WelcomeScreen extends Component {
                         onValueChange={(value) =>
                           this.setState({category: value})
                         }
-                        items={[
-                          {label: 'Entertainment: General Knowledge', value: 9},
-                          {label: 'Entertainment: Books', value: 10},
-                          {label: 'Entertainment: Film', value: 11},
-                          {label: 'Entertainment: Music', value: 12},
-                          {
-                            label: 'Entertainment: Musicals & Theatres',
-                            value: 13,
-                          },
-                          {label: 'Entertainment: Television', value: 14},
-                          {label: 'Entertainment: Video Games', value: 15},
-                          {label: 'Entertainment: Board Games', value: 16},
-                          {label: 'Science & Nature', value: 17},
-                          {label: 'Science: Computers', value: 18},
-                          {label: 'Science: Mathematics', value: 19},
-                          {label: 'Mythology', value: 20},
-                          {label: 'Sports', value: 21},
-                          {label: 'Geography', value: 22},
-                          {label: 'History', value: 23},
-                          {label: 'Politics', value: 24},
-                          {label: 'Art', value: 25},
-                          {label: 'Celebrities', value: 26},
-                          {label: 'Animals', value: 27},
-                          {label: 'Vehicles', value: 28},
-                          {label: 'Entertainment: Comics', value: 29},
-                          {label: 'Science: Gadgets', value: 30},
-                          {
-                            label: 'Entertainment: Japanese Anime & Manga',
-                            value: 31,
-                          },
-                          {
-                            label: 'Entertainment: Cartoon & Animations',
-                            value: 32,
-                          },
-                        ]}
+                        items={modalCategories}
                       />
                     </Text>
                     <Text
@@ -272,11 +236,7 @@ class WelcomeScreen extends Component {
                         onValueChange={(value) =>
                           this.setState({difficulty: value})
                         }
-                        items={[
-                          {label: 'Easy', value: 'easy'},
-                          {label: 'Medium', value: 'medium'},
-                          {label: 'Hard', value: 'hard'},
-                        ]}
+                        items={modalDifficulty}
                       />
                     </Text>
                   </View>
@@ -286,7 +246,7 @@ class WelcomeScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={({flex: 0.9}, mainContainer)}>
+        <View style={({flex: 0.9}, styles.mainContainer)}>
           <View style={{flex: 0.4}}>{this.renderLottie()}</View>
           <View style={{flex: 0.1, marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
