@@ -3,8 +3,49 @@ import {View, Text} from 'react-native';
 import {connect} from 'react-redux';
 
 class Header extends Component {
+  renderPoints() {
+    if (this.props.profileReducer.earnedPerQuiz > 0) {
+      return (
+        <View
+          style={{
+            flex: 0.5,
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+          }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              right: 0,
+            }}>
+            + {this.props.profileReducer.earnedPerQuiz} |{' '}
+            {this.props.profileReducer.points} Points
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            flex: 0.5,
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+          }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              right: 0,
+            }}>
+            {this.props.profileReducer.points} Points
+          </Text>
+        </View>
+      );
+    }
+  }
+
   render() {
-    const {questionReducer} = this.props;
+    const {questionReducer, profileReducer} = this.props;
     return (
       <View
         style={{
@@ -26,21 +67,7 @@ class Header extends Component {
             {Object.keys(questionReducer.QUESTIONS.results).length}
           </Text>
         </View>
-        <View
-          style={{
-            flex: 0.5,
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-          }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              right: 0,
-            }}>
-            200
-          </Text>
-        </View>
+        {this.renderPoints()}
       </View>
     );
   }

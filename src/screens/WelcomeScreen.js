@@ -92,14 +92,7 @@ class WelcomeScreen extends Component {
   }
 
   start = async () => {
-    const {
-      increasePageNum,
-      updateQuestionData,
-      questionReducer,
-      pageReducer,
-      updateActiveQuestion,
-    } = this.props;
-    const {category, difficulty} = this.state;
+    const {increasePageNum} = this.props;
     this.setState({
       loading: true,
       settingsDisabled: true,
@@ -107,15 +100,15 @@ class WelcomeScreen extends Component {
 
     const URL =
       'https://opentdb.com/api.php?amount=15&encode=url3986&category=' +
-      category +
+      this.state.category +
       '&difficulty=' +
-      difficulty +
+      this.state.difficulty +
       '&type=multiple';
 
     const questionApiCall = await fetch(URL);
 
     const data = await questionApiCall.json();
-    updateQuestionData(data);
+    this.props.updateQuestionData(data);
 
     console.log(
       this.props.questionReducer.QUESTIONS.results[
@@ -124,28 +117,33 @@ class WelcomeScreen extends Component {
     );
 
     const answers = [
-      ...this.props.questionReducer.QUESTIONS.results[questionReducer.questNum]
-        .incorrect_answers,
-      this.props.questionReducer.QUESTIONS.results[questionReducer.questNum]
-        .correct_answer,
+      ...this.props.questionReducer.QUESTIONS.results[
+        this.props.questionReducer.questNum
+      ].incorrect_answers,
+      this.props.questionReducer.QUESTIONS.results[
+        this.props.questionReducer.questNum
+      ].correct_answer,
     ];
 
     let activeQuestion = [];
 
-    activeQuestion[QUESTION_INDEX] =
-      questionReducer.QUESTIONS.results[questionReducer.questNum].question;
+    activeQuestion[
+      QUESTION_INDEX
+    ] = this.props.questionReducer.QUESTIONS.results[
+      this.props.questionReducer.questNum
+    ].question;
 
     randomizedAnswers = shuffle(answers);
     activeQuestion[ANSWER_INDEX] = randomizedAnswers;
 
-    updateActiveQuestion(activeQuestion);
+    this.props.updateActiveQuestion(activeQuestion);
 
     this.setState({
       loading: false,
       settingsDisabled: false,
     });
 
-    increasePageNum(pageReducer.pageNum);
+    increasePageNum(this.props.pageReducer.pageNum);
   };
 
   displayModal(show) {
@@ -154,8 +152,7 @@ class WelcomeScreen extends Component {
 
   button() {
     const {buttonStyle} = styles;
-    const {loading} = this.state;
-    if (loading == true) {
+    if (this.state.loading == true) {
       return (
         <View>
           <ActivityIndicator size="large"></ActivityIndicator>
@@ -312,7 +309,7 @@ class WelcomeScreen extends Component {
             }}>
             <Text
               style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
-              My Points:{'\n'}
+              My Points:{'\n\n'}
               {this.props.profileReducer.points}
             </Text>
           </View>
