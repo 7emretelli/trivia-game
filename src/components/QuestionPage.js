@@ -252,6 +252,7 @@ class QuestionPage extends Component {
   }
 
   gameOver() {
+    const {win} = this.state;
     if (win == '2') {
       return (
         <View style={{flex: 1}}>
