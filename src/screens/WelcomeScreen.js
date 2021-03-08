@@ -152,7 +152,7 @@ class WelcomeScreen extends Component {
 
   button() {
     const {buttonStyle} = styles;
-    if (this.state.loading == true) {
+    if (this.state.loading) {
       return (
         <View>
           <ActivityIndicator size="large"></ActivityIndicator>
@@ -170,7 +170,6 @@ class WelcomeScreen extends Component {
   }
 
   render() {
-    const {mainContainer} = styles;
     return (
       <View style={{flex: 1}}>
         <Modal
@@ -247,7 +246,7 @@ class WelcomeScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={({flex: 0.9}, mainContainer)}>
+        <View style={({flex: 0.9}, styles.mainContainer)}>
           <View style={{flex: 0.4}}>{this.renderLottie()}</View>
           <View style={{flex: 0.2, marginTop: 28}}>
             <View style={{alignItems: 'center'}}>

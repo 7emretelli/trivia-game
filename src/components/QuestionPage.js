@@ -68,20 +68,10 @@ class QuestionPage extends Component {
       if (this.state.answer == this.state.correctAnswer) {
         return {
           backgroundColor: '#58E778',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-          flexDirection: 'row',
         };
       } else {
         return {
           backgroundColor: '#ec4646',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-          flexDirection: 'row',
         };
       }
     } else {
@@ -90,20 +80,10 @@ class QuestionPage extends Component {
       ) {
         return {
           backgroundColor: '#a6a9b6',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-          flexDirection: 'row',
         };
       } else {
         return {
           backgroundColor: '#6BB1F1',
-          width: 294,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 10,
-          flexDirection: 'row',
         };
       }
     }
@@ -240,10 +220,10 @@ class QuestionPage extends Component {
       isJoker: true,
     });
 
-    var answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
+    let answerslist = questionReducer.activeQuestion[ANSWER_INDEX];
 
-    var i;
-    var newanswerslist = [];
+    let i;
+    let newanswerslist = [];
 
     for (i = 0; i < answerslist.length; i++) {
       if (answerslist[i] != this.state.correctAnswer) {
@@ -270,24 +250,6 @@ class QuestionPage extends Component {
     }, 300);
   }
 
-  buttonJoker() {
-    if (this.state.answer == 0) {
-      if (this.state.isJoker == true) {
-        return {
-          backgroundColor: '#a6a9b6',
-        };
-      } else {
-        return {
-          backgroundColor: '#ec4646',
-        };
-      }
-    } else {
-      return {
-        backgroundColor: '#a6a9b6',
-      };
-    }
-  }
-
   jokerDisable() {
     if (this.state.win == 1) {
       return true;
@@ -307,7 +269,17 @@ class QuestionPage extends Component {
         <TouchableOpacity
           disabled={this.disable(item)}
           onPress={() => this.isClicked(item)}>
-          <View style={this.answerStyle(item)}>
+          <View
+            style={[
+              this.answerStyle(item),
+              {
+                width: 294,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10,
+                flexDirection: 'row',
+              },
+            ]}>
             <Text
               style={{
                 marginVertical: 5,
@@ -336,8 +308,11 @@ class QuestionPage extends Component {
           <View style={{flex: 0.1, justifyContent: 'flex-end'}}>
             <View
               style={[
-                this.buttonJoker(),
                 {
+                  backgroundColor:
+                    this.state.answer == 0 && !this.state.isJoker
+                      ? '#ec4646'
+                      : '#a6a9b6',
                   height: 30,
                   width: 100,
                   justifyContent: 'center',
