@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   loading: true,
   points: 0,
   questNum: 0,
+  joker: 1,
 };
 
 const questionReducer = (state = INITIAL_STATE, {type, payload}) => {
