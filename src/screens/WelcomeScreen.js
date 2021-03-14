@@ -19,7 +19,6 @@ import flushed from '../lotties/flushed.json';
 import silly from '../lotties/silly.json';
 import sleeping from '../lotties/sleeping.json';
 import shocked from '../lotties/shocked.json';
-import trophy from '../lotties/trophy.json';
 import vomiting from '../lotties/vomiting.json';
 import {
   ANSWER_INDEX,

@@ -236,7 +236,7 @@ class QuestionPage extends Component {
         </View>
       );
     }
-    if (win == '3') {
+    if (win == 3) {
       setTimeout(() => {
         this.won();
       }, 1000);
@@ -253,7 +253,7 @@ class QuestionPage extends Component {
 
   gameOver() {
     const {win} = this.state;
-    if (win == '2') {
+    if (win == 2) {
       return (
         <View style={{flex: 1}}>
           <Text
@@ -322,9 +322,9 @@ class QuestionPage extends Component {
       return true;
     } else {
       if (isJoker == false) {
-        return false;
+        return isJoker;
       } else {
-        return true;
+        return isJoker;
       }
     }
   }
