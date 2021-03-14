@@ -15,12 +15,17 @@ import LottieView from 'lottie-react-native';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
+import flushed from '../lotties/flushed.json';
+import silly from '../lotties/silly.json';
+import sleeping from '../lotties/sleeping.json';
+import shocked from '../lotties/shocked.json';
+import vomiting from '../lotties/vomiting.json';
 import {
   ANSWER_INDEX,
-  QUESTION_INDEX,
-  shuffle,
   modalCategories,
   modalDifficulty,
+  QUESTION_INDEX,
+  shuffle,
 } from '../util';
 
 class WelcomeScreen extends Component {
@@ -38,7 +43,7 @@ class WelcomeScreen extends Component {
   }
 
   componentDidMount() {
-    var number = Math.floor(Math.random() * 4);
+    var number = Math.floor(Math.random() * 5);
     this.setState({
       emojiNum: number,
     });
@@ -49,7 +54,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/flushed.json')}
+          source={flushed}
           autoPlay
           loop
         />
@@ -59,7 +64,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/shocked.json')}
+          source={shocked}
           autoPlay
           loop
         />
@@ -67,19 +72,14 @@ class WelcomeScreen extends Component {
     }
     if (this.state.emojiNum == 2) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/silly.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{flex: 1, width: 10}} source={silly} autoPlay loop />
       );
     }
     if (this.state.emojiNum == 3) {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/sleeping.json')}
+          source={sleeping}
           autoPlay
           loop
         />
@@ -89,7 +89,7 @@ class WelcomeScreen extends Component {
       return (
         <LottieView
           style={{flex: 1, width: 10}}
-          source={require('../lotties/vomiting.json')}
+          source={vomiting}
           autoPlay
           loop
         />
@@ -151,7 +151,6 @@ class WelcomeScreen extends Component {
   }
 
   button() {
-    const {buttonStyle} = styles;
     if (this.state.loading) {
       return (
         <View>
@@ -162,7 +161,7 @@ class WelcomeScreen extends Component {
       return (
         <View>
           <TouchableOpacity onPress={this.start}>
-            <Text style={buttonStyle}>GET STARTED</Text>
+            <Text style={styles.buttonStyle}>GET STARTED</Text>
           </TouchableOpacity>
         </View>
       );
@@ -177,7 +176,7 @@ class WelcomeScreen extends Component {
           transparent={true}
           visible={this.state.isVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            Alert.alert('Settings Saved');
           }}>
           <View
             style={{
@@ -248,7 +247,7 @@ class WelcomeScreen extends Component {
         </Modal>
         <View style={({flex: 0.9}, styles.mainContainer)}>
           <View style={{flex: 0.4}}>{this.renderLottie()}</View>
-          <View style={{flex: 0.2, marginTop: 28}}>
+          <View style={{flex: 0.1, marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
               {this.button()}
               <View>
@@ -260,6 +259,18 @@ class WelcomeScreen extends Component {
                 </TouchableOpacity>
               </View>
             </View>
+          </View>
+          <View
+            style={{
+              flex: 0.2,
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+              My Points:{'\n\n'}
+              {this.props.profileReducer.points}
+            </Text>
           </View>
         </View>
         <View
@@ -298,8 +309,8 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
-  return {pageReducer, questionReducer};
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
+  return {pageReducer, questionReducer, profileReducer};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

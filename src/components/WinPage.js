@@ -6,12 +6,22 @@ import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
+import {increasePointsAction} from '../actions/increasePointsAction';
+import trophy from '../lotties/trophy.json';
 import {bindActionCreators} from 'redux';
 import LottieView from 'lottie-react-native';
 
 class WinPage extends Component {
   tryAgain() {
-    const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
+    const {
+      increasePointsAction,
+      profileReducer,
+      updateActiveQuestion,
+      updateQuestNum,
+      increasePageNum,
+    } = this.props;
+
+    increasePointsAction(profileReducer.earnedPerQuiz);
     activeQuestion = '';
     questionNumber = -1;
     pageNumber = -1;
@@ -24,7 +34,6 @@ class WinPage extends Component {
     this.animation.play(0, 60);
   }
 
-  
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
@@ -52,15 +61,19 @@ class WinPage extends Component {
             fontWeight: 'bold',
             marginTop: 32,
           }}>
-          With: {'\n'} <Text>200 Points</Text>
+          With: {'\n'}{' '}
+          <Text>+{this.props.profileReducer.earnedPerQuiz} Points</Text>
         </Text>
         <View style={{height: 300}}>
-        <LottieView 
-        ref={animation => {
-          this.animation = animation;
-        }}
-        style={{flex:1, width: 1}}
-        source={require('../lotties/trophy.json')} loop={false} autoPlay/>
+          <LottieView
+            ref={(animation) => {
+              this.animation = animation;
+            }}
+            style={{flex: 1, width: 1}}
+            source={trophy}
+            loop={false}
+            autoPlay
+          />
         </View>
         <Text style={{fontSize: 36, fontWeight: 'bold'}}>
           Wanna Play Again?
@@ -85,14 +98,16 @@ const mapDispatchToProps = (dispatch) =>
       updateQuestNum,
       updateQuestionData,
       increasePageNum,
+      increasePointsAction,
     },
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
   return {
     pageReducer,
     questionReducer,
+    profileReducer,
   };
 };
 
