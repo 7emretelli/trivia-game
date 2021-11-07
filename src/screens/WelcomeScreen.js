@@ -6,21 +6,30 @@ import {
   Text,
   Modal,
   ActivityIndicator,
+  Alert,
+  Platform,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RNPickerSelect from 'react-native-picker-select';
 import LottieView from 'lottie-react-native';
+import {MMKV} from 'react-native-mmkv';
 import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestionData} from '../actions/updateDataAction';
+import flushed from '../lotties/flushed.json';
+import silly from '../lotties/silly.json';
+import sleeping from '../lotties/sleeping.json';
+import shocked from '../lotties/shocked.json';
+import vomiting from '../lotties/vomiting.json';
 import {
   ANSWER_INDEX,
-  QUESTION_INDEX,
-  shuffle,
   modalCategories,
   modalDifficulty,
+  QUESTION_INDEX,
+  shuffle,
 } from '../util';
 
 class WelcomeScreen extends Component {
@@ -38,7 +47,7 @@ class WelcomeScreen extends Component {
   }
 
   componentDidMount() {
-    var number = Math.floor(Math.random() * 4);
+    var number = Math.floor(Math.random() * 5);
     this.setState({
       emojiNum: number,
     });
@@ -47,58 +56,40 @@ class WelcomeScreen extends Component {
   renderLottie() {
     if (this.state.emojiNum == 0) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/flushed.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{width: '70%'}} source={flushed} autoPlay loop />
       );
     }
     if (this.state.emojiNum == 1) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/shocked.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{width: '70%'}} source={shocked} autoPlay loop />
       );
     }
     if (this.state.emojiNum == 2) {
-      return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/silly.json')}
-          autoPlay
-          loop
-        />
-      );
+      return <LottieView style={{width: '70%'}} source={silly} autoPlay loop />;
     }
     if (this.state.emojiNum == 3) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/sleeping.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{width: '70%'}} source={sleeping} autoPlay loop />
       );
     }
     if (this.state.emojiNum == 4) {
       return (
-        <LottieView
-          style={{flex: 1, width: 10}}
-          source={require('../lotties/vomiting.json')}
-          autoPlay
-          loop
-        />
+        <LottieView style={{width: '70%'}} source={vomiting} autoPlay loop />
       );
     }
   }
 
+  CheckConnectivity = () => {
+    NetInfo.fetch().then((state) => {
+      if (!state.isConnected) {
+        Alert.alert('You are not connected to the internet');
+      }
+    });
+  };
+
   start = async () => {
     const {increasePageNum} = this.props;
+    this.CheckConnectivity();
     this.setState({
       loading: true,
       settingsDisabled: true,
@@ -111,7 +102,12 @@ class WelcomeScreen extends Component {
       this.state.difficulty +
       '&type=multiple';
 
-    const questionApiCall = await fetch(URL);
+    var questionApiCall;
+    try {
+      questionApiCall = await fetch(URL);
+    } catch (error) {
+      return Alert.alert('You are not connected to the internet');
+    }
 
     const data = await questionApiCall.json();
     this.props.updateQuestionData(data);
@@ -151,18 +147,28 @@ class WelcomeScreen extends Component {
   }
 
   button() {
-    const {buttonStyle} = styles;
     if (this.state.loading) {
       return (
         <View>
-          <ActivityIndicator size="large"></ActivityIndicator>
+          <ActivityIndicator size="large" color="black"></ActivityIndicator>
         </View>
       );
     } else {
       return (
         <View>
-          <TouchableOpacity onPress={this.start}>
-            <Text style={buttonStyle}>GET STARTED</Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'rgba(285, 183, 26, 1)',
+              borderRadius: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+            }}
+            onPress={this.start}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={styles.buttonStyle}>
+                GET STARTED <AntDesign name="right" size={20} />
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
       );
@@ -177,7 +183,7 @@ class WelcomeScreen extends Component {
           transparent={true}
           visible={this.state.isVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            Alert.alert('Settings Saved');
           }}>
           <View
             style={{
@@ -216,29 +222,61 @@ class WelcomeScreen extends Component {
                     flexDirection: 'row',
                   }}>
                   <View style={{flex: 1}}>
-                    <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-                      Category:{' '}
+                    <View style={{width: '100%', flexDirection: 'column'}}>
+                      <Text style={{fontSize: 24, fontWeight: 'bold'}}>
+                        Category:{' '}
+                      </Text>
                       <RNPickerSelect
                         disabled={this.state.settingsDisabled}
-                        style={{fontSize: 24, fontWeight: 'bold'}}
+                        placeholder={{
+                          label: 'Select a category...',
+                          value: null,
+                          color: '#9EA0A4',
+                        }}
+                        style={{
+                          ...pickerSelectStyles,
+                          placeholder: {
+                            color: 'black',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                          },
+                        }}
                         onValueChange={(value) =>
                           this.setState({category: value})
                         }
                         items={modalCategories}
                       />
-                    </Text>
-                    <Text
-                      style={{marginTop: 10, fontSize: 24, fontWeight: 'bold'}}>
-                      Difficulty:{' '}
+                    </View>
+                    <View>
+                      <Text
+                        style={{
+                          marginTop: 10,
+                          fontSize: 24,
+                          fontWeight: 'bold',
+                        }}>
+                        Difficulty:{' '}
+                      </Text>
                       <RNPickerSelect
                         disabled={this.state.settingsDisabled}
-                        style={{fontSize: 24, fontWeight: 'bold'}}
+                        placeholder={{
+                          label: 'Select a difficulty...',
+                          value: null,
+                          color: '#9EA0A4',
+                        }}
+                        style={{
+                          ...pickerSelectStyles,
+                          placeholder: {
+                            color: 'black',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                          },
+                        }}
                         onValueChange={(value) =>
                           this.setState({difficulty: value})
                         }
                         items={modalDifficulty}
                       />
-                    </Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -246,20 +284,32 @@ class WelcomeScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={({flex: 0.9}, styles.mainContainer)}>
-          <View style={{flex: 0.4}}>{this.renderLottie()}</View>
-          <View style={{flex: 0.2, marginTop: 28}}>
+        <View style={({flex: 1}, styles.mainContainer)}>
+          <View>{this.renderLottie()}</View>
+          <View style={{marginTop: 28}}>
             <View style={{alignItems: 'center'}}>
               {this.button()}
               <View>
                 <TouchableOpacity onPress={() => this.displayModal(true)}>
-                  <AntDesign
-                    style={{marginTop: 20}}
-                    size={30}
-                    name="setting"></AntDesign>
+                  <AntDesign style={{marginTop: 20}} size={30} name="setting" />
                 </TouchableOpacity>
               </View>
             </View>
+          </View>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+              My Points:{'\n'}
+              {this.props.profileReducer.points}
+            </Text>
+            <Text style={{textAlign: 'center'}}>
+              Points are calculated for only games that played today
+            </Text>
           </View>
         </View>
         <View
@@ -276,6 +326,28 @@ class WelcomeScreen extends Component {
   }
 }
 
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
 const styles = StyleSheet.create({
   buttonStyle: {
     fontWeight: 'bold',
@@ -298,8 +370,8 @@ const mapDispatchToProps = (dispatch) =>
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
-  return {pageReducer, questionReducer};
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
+  return {pageReducer, questionReducer, profileReducer};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

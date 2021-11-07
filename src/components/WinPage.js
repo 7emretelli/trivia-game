@@ -6,25 +6,36 @@ import {increasePageNum} from '../actions/pageAction';
 import {updateActiveQuestion} from '../actions/updateActiveQuestion';
 import {updateQuestNum} from '../actions/updateQuestNum';
 import {updateQuestionData} from '../actions/updateDataAction';
+import {increasePointsAction} from '../actions/increasePointsAction';
+import trophy from '../lotties/trophy.json';
 import {bindActionCreators} from 'redux';
 import LottieView from 'lottie-react-native';
+import {clearEarnedPointsAction} from '../actions/clearEarnedPointsAction';
 
 class WinPage extends Component {
   tryAgain() {
-    const {updateActiveQuestion, updateQuestNum, increasePageNum} = this.props;
+    const {
+      increasePointsAction,
+      profileReducer,
+      updateActiveQuestion,
+      updateQuestNum,
+      increasePageNum,
+    } = this.props;
+
+    increasePointsAction(profileReducer.earnedPerQuiz);
     activeQuestion = '';
     questionNumber = -1;
     pageNumber = -1;
     updateActiveQuestion(activeQuestion);
     updateQuestNum(questionNumber);
     increasePageNum(pageNumber);
+    this.props.clearEarnedPointsAction();
   }
 
   componentDidMount() {
     this.animation.play(0, 60);
   }
 
-  
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
@@ -33,7 +44,7 @@ class WinPage extends Component {
             color: '#3AA953',
             fontSize: 36,
             fontWeight: 'bold',
-            marginTop: 85,
+            marginTop: 50,
           }}>
           Congratulations!
         </Text>
@@ -48,30 +59,44 @@ class WinPage extends Component {
         <Text
           style={{
             color: '#000000',
-            fontSize: 18,
+            fontSize: 22,
             fontWeight: 'bold',
             marginTop: 32,
           }}>
-          With: {'\n'} <Text>200 Points</Text>
+          With: <Text>+{this.props.profileReducer.earnedPerQuiz} Points</Text>
         </Text>
         <View style={{height: 300}}>
-        <LottieView 
-        ref={animation => {
-          this.animation = animation;
-        }}
-        style={{flex:1, width: 1}}
-        source={require('../lotties/trophy.json')} loop={false} autoPlay/>
+          <LottieView
+            ref={(animation) => {
+              this.animation = animation;
+            }}
+            style={{flex: 1, width: 1}}
+            source={trophy}
+            loop={false}
+            autoPlay
+          />
         </View>
         <Text style={{fontSize: 36, fontWeight: 'bold'}}>
           Wanna Play Again?
         </Text>
         <TouchableOpacity
           onPress={() => this.tryAgain()}
-          style={{alignItems: 'center', marginTop: 64}}>
-          <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+          style={{alignItems: 'center', marginTop: 20}}>
+          <Text
+            style={{
+              fontSize: 24,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+              borderRadius: 5,
+              backgroundColor: 'rgba(285, 183, 26, 1)',
+              fontWeight: 'bold',
+            }}>
+            Play Again
+          </Text>
           <AntDesign
             style={{marginTop: 19}}
             size={30}
+            color={'rgba(285, 183, 26, 1)'}
             name="reload1"></AntDesign>
         </TouchableOpacity>
       </View>
@@ -85,14 +110,17 @@ const mapDispatchToProps = (dispatch) =>
       updateQuestNum,
       updateQuestionData,
       increasePageNum,
+      increasePointsAction,
+      clearEarnedPointsAction,
     },
     dispatch,
   );
 
-const mapStateToProps = ({pageReducer, questionReducer}) => {
+const mapStateToProps = ({pageReducer, questionReducer, profileReducer}) => {
   return {
     pageReducer,
     questionReducer,
+    profileReducer,
   };
 };
 

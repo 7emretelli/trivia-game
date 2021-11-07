@@ -2,7 +2,6 @@ const INITIAL_STATE = {
   QUESTIONS: [],
   activeQuestion: [],
   loading: true,
-  points: 0,
   questNum: 0,
   joker: 1,
 };

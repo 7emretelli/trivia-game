@@ -127,9 +127,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    
 
     defaultConfig {
-        applicationId "com.triviagame"
+        applicationId "com.askmeifyoucan.trivia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
