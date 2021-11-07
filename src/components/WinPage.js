@@ -10,6 +10,7 @@ import {increasePointsAction} from '../actions/increasePointsAction';
 import trophy from '../lotties/trophy.json';
 import {bindActionCreators} from 'redux';
 import LottieView from 'lottie-react-native';
+import {clearEarnedPointsAction} from '../actions/clearEarnedPointsAction';
 
 class WinPage extends Component {
   tryAgain() {
@@ -28,6 +29,7 @@ class WinPage extends Component {
     updateActiveQuestion(activeQuestion);
     updateQuestNum(questionNumber);
     increasePageNum(pageNumber);
+    this.props.clearEarnedPointsAction();
   }
 
   componentDidMount() {
@@ -42,7 +44,7 @@ class WinPage extends Component {
             color: '#3AA953',
             fontSize: 36,
             fontWeight: 'bold',
-            marginTop: 85,
+            marginTop: 50,
           }}>
           Congratulations!
         </Text>
@@ -57,12 +59,11 @@ class WinPage extends Component {
         <Text
           style={{
             color: '#000000',
-            fontSize: 18,
+            fontSize: 22,
             fontWeight: 'bold',
             marginTop: 32,
           }}>
-          With: {'\n'}{' '}
-          <Text>+{this.props.profileReducer.earnedPerQuiz} Points</Text>
+          With: <Text>+{this.props.profileReducer.earnedPerQuiz} Points</Text>
         </Text>
         <View style={{height: 300}}>
           <LottieView
@@ -80,11 +81,22 @@ class WinPage extends Component {
         </Text>
         <TouchableOpacity
           onPress={() => this.tryAgain()}
-          style={{alignItems: 'center', marginTop: 64}}>
-          <Text style={{fontSize: 24, fontWeight: 'bold'}}>Try Again</Text>
+          style={{alignItems: 'center', marginTop: 20}}>
+          <Text
+            style={{
+              fontSize: 24,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+              borderRadius: 5,
+              backgroundColor: 'rgba(285, 183, 26, 1)',
+              fontWeight: 'bold',
+            }}>
+            Play Again
+          </Text>
           <AntDesign
             style={{marginTop: 19}}
             size={30}
+            color={'rgba(285, 183, 26, 1)'}
             name="reload1"></AntDesign>
         </TouchableOpacity>
       </View>
@@ -99,6 +111,7 @@ const mapDispatchToProps = (dispatch) =>
       updateQuestionData,
       increasePageNum,
       increasePointsAction,
+      clearEarnedPointsAction,
     },
     dispatch,
   );

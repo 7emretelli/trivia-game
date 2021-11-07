@@ -1,4 +1,4 @@
-package com.triviagame;
+package com.askmeifyoucan.trivia;
 
 import android.app.Application;
 import android.content.Context;

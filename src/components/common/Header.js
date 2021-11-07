@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
 
 class Header extends Component {
@@ -13,14 +13,16 @@ class Header extends Component {
             justifyContent: 'center',
             alignItems: 'flex-end',
           }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              right: 0,
-            }}>
-            + {profileReducer.earnedPerQuiz} | {profileReducer.points} Points
-          </Text>
+          <SafeAreaView>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                right: 0,
+              }}>
+              + {profileReducer.earnedPerQuiz} | {profileReducer.points} Points
+            </Text>
+          </SafeAreaView>
         </View>
       );
     } else {
@@ -31,14 +33,16 @@ class Header extends Component {
             justifyContent: 'center',
             alignItems: 'flex-end',
           }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              right: 0,
-            }}>
-            {profileReducer.points} Points
-          </Text>
+          <SafeAreaView>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                right: 0,
+              }}>
+              {profileReducer.points} Points
+            </Text>
+          </SafeAreaView>
         </View>
       );
     }
@@ -50,11 +54,10 @@ class Header extends Component {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#8EDAA3',
+          backgroundColor: '#6BB1F1',
           flexDirection: 'row',
-          alignItems: 'flex-end',
-          paddingHorizontal: 24,
-          paddingBottom: 10,
+          alignItems: 'center',
+          paddingHorizontal: 10,
         }}>
         <View
           style={{
@@ -62,11 +65,14 @@ class Header extends Component {
             justifyContent: 'center',
             alignItems: 'flex-start',
           }}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-            Question: {questionReducer.questNum + 1} /{' '}
-            {Object.keys(questionReducer.QUESTIONS.results).length}
-          </Text>
+          <SafeAreaView>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              Question: {questionReducer.questNum + 1} /{' '}
+              {Object.keys(questionReducer.QUESTIONS.results).length}
+            </Text>
+          </SafeAreaView>
         </View>
+
         {this.renderPoints()}
       </View>
     );

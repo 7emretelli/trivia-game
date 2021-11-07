@@ -66,7 +66,7 @@ class QuestionPage extends Component {
         <Text
           style={{
             fontWeight: 'bold',
-            fontSize: 16,
+            fontSize: 20,
             marginHorizontal: 10,
             textAlign: 'center',
           }}>
@@ -341,9 +341,11 @@ class QuestionPage extends Component {
               this.answerStyle(item),
               {
                 width: 294,
+                paddingVertical: 2,
+                borderRadius: 5,
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginBottom: 15,
+                marginBottom: 20,
                 flexDirection: 'row',
               },
             ]}>
@@ -351,7 +353,7 @@ class QuestionPage extends Component {
               style={{
                 marginVertical: 5,
                 textAlign: 'center',
-                fontSize: 15,
+                fontSize: 17,
                 fontWeight: 'bold',
                 marginHorizontal: 10,
                 flexShrink: 1,
@@ -369,7 +371,7 @@ class QuestionPage extends Component {
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        <View style={{flex: 0.1}}>{this.gameOver()}</View>
+        <View style={{flex: 0.15, paddingTop: 30}}>{this.gameOver()}</View>
 
         <View style={{flex: 0.5, alignItems: 'center'}}>
           <View
@@ -446,7 +448,7 @@ class QuestionPage extends Component {
           </View>
         </View>
 
-        <View style={{flex: 0.4}}>{this.texts()}</View>
+        <View style={{flex: 0.35}}>{this.texts()}</View>
       </View>
     );
   }
